@@ -42,9 +42,9 @@
 all:
 	gprbuild -p -Pgnat/proto_moc.gpr
 	gprbuild -p -Pgnat/proto.gpr
-	gprbuild -p -Pgnat/main.gpr
+	gprbuild -p -Pgnat/uim.gpr
 
 clean:
 	gprbuild -Pgnat/proto_moc.gpr
 	gprclean -Pgnat/proto.gpr
-	gprclean -Pgnat/main.gpr
+	gprclean -Pgnat/uim.gpr

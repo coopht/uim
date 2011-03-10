@@ -41,9 +41,9 @@
 ------------------------------------------------------------------------------
 with "uim_config";
 
-project Main is
+project uim is
    for Main use ("main.adb");
-   for Source_Dirs use ("../source/app");
+   for Source_Dirs use ("../source/ui");
    for Library_Dir use "../.libs";
    for Object_Dir  use "../.objs";
 
@@ -55,6 +55,8 @@ project Main is
 
    package Builder is
       for Executable ("main.adb") use "uim";
+
+      for Global_Configuration_Pragmas use "qtada.adc";
    end Builder;
 
-end Main;
+end uim;
