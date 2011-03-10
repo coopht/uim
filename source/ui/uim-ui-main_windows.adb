@@ -39,9 +39,22 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with UIM.UI;
+with Qt4.Main_Windows;
+private with Qt4.Main_Windows.Directors;
 
-procedure Main is
-begin
-   UIM.UI.Start_Gui;
-end Main;
+with UIM.UI.Main_Windows.MOC;
+pragma Warnings (Off, UIM.UI.Main_Windows.MOC);
+--  Child package MOC must be included in the executable file.
+
+package body UIM.UI.Main_Windows is
+
+   function Create return not null Main_Window_Access is
+      Self   : constant Main_Window_Access := new Main_Window;
+
+   begin
+      --  Initialize director
+      Qt4.Main_Windows.Directors.Constructors.Initialize (Self);
+      return Self;
+   end Create;
+
+end UIM.UI.Main_Windows;

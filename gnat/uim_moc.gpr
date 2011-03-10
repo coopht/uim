@@ -39,9 +39,16 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with UIM.UI;
+with "proto";
+with "qt_gui";
 
-procedure Main is
-begin
-   UIM.UI.Start_Gui;
-end Main;
+project UIM_Main_Window_Moc is
+
+   for Languages use ("Amoc");
+   for Source_Dirs use ("../source/ui/");
+
+   for Object_Dir use "../source/ui/.amoc";
+
+   for Source_Files use ("uim-ui-main_windows.ads");
+
+end UIM_Main_Window_Moc;

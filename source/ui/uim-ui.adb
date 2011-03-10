@@ -39,9 +39,28 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with UIM.UI;
+with Qt_Ada.Application;
 
-procedure Main is
-begin
-   UIM.UI.Start_Gui;
-end Main;
+with UIM.UI.Main_Windows;
+
+package body UIM.UI is
+
+   -----------------
+   --  Start_Gui  --
+   -----------------
+   procedure Start_Gui is
+   begin
+      Qt_Ada.Application.Initialize;
+
+      declare
+         W : constant not null UIM.UI.Main_Windows.Main_Window_Access
+           := UIM.UI.Main_Windows.Create;
+
+      begin
+         W.Show;
+         Qt_Ada.Application.Execute;
+      end;
+
+   end Start_Gui;
+
+end UIM.UI;

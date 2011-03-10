@@ -39,9 +39,22 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with UIM.UI;
+with Qt4.Main_Windows;
+private with Qt4.Main_Windows.Directors;
 
-procedure Main is
-begin
-   UIM.UI.Start_Gui;
-end Main;
+package UIM.UI.Main_Windows is
+
+   type Main_Window is limited new Qt4.Main_Windows.Q_Main_Window with private;
+
+   type Main_Window_Access is access all Main_Window'Class;
+
+   function Create return not null Main_Window_Access;
+
+private
+
+   type Main_Window is
+      limited new Qt4.Main_Windows.Directors.Q_Main_Window_Director with record
+     null;
+   end record;
+
+end UIM.UI.Main_Windows;

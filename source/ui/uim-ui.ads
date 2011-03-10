@@ -39,9 +39,8 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with UIM.UI;
+package UIM.UI is
 
-procedure Main is
-begin
-   UIM.UI.Start_Gui;
-end Main;
+   procedure Start_Gui;
+
+end UIM.UI;
