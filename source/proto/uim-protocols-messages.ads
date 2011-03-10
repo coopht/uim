@@ -39,12 +39,17 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-
+with Qt_Ada.Generic_Variants;
 with League.Strings;
 
 package UIM.Protocols.Messages is
 
    type Message is tagged private;
+
+   type Message_Access is access all Message;
+
+   package Message_Variant is
+      new Qt_Ada.Generic_Variants (Message_Access, "Message_Access");
 
 private
 

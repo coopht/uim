@@ -39,30 +39,64 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Ada.Containers.Vectors;
+with Qt4.Objects;
+private with Qt4.Objects.Directors;
+with Qt4.Variants;
 
-with League.Strings;
+with UIM.Protocols.Contact_List_Models;
 
-with UIM.Protocols.Handlers;
-with UIM.Protocols.Statuses;
+package UIM.Protocols.Handlers is
 
-package UIM.Protocols.Common is
+   type Protocol_Handler is limited new Qt4.Objects.Q_Object with private;
 
-   type Common_Protocol is limited interface;
+   type Protocol_Handler_Access is access all Protocol_Handler;
 
-   type Common_Protocol_Access is access all Common_Protocol'Class;
+   function Create return not null Protocol_Handler_Access;
 
-   procedure Set_Status
-    (Self   : not null access Common_Protocol;
-     Status : not null access UIM.Protocols.Statuses.Status) is abstract;
+private
 
-   procedure Change_Status
-    (Self   : not null access Common_Protocol;
-     Status : League.Strings.Universal_String) is abstract;
-   --  XXX: Rewrite with appropriate types
+   type Protocol_Handler is limited new Qt4.Objects.Directors.Q_Object_Director
+     with null record;
 
-   function Get_Protocol_Handler (Self : not null access Common_Protocol)
-      return not null UIM.Protocols.Handlers.Protocol_Handler_Access
-        is abstract;
+   --  Qt Signals --
 
-end UIM.Protocols.Common;
+   --  Signals notify gui about some events
+   --  for internal use only
+
+   --  Message group
+
+   procedure Emit_Message_Recieve_Signal
+     (Self : not null access Protocol_Handler;
+      Msg  : Qt4.Variants.Q_Variant);
+   pragma Q_Signal (Emit_Message_Recieve_Signal);
+   --  Signal emits when new message arrives from somebody
+
+   --  procedure Emit_Typing_Notification_Signal
+   --    (Self : not null access Protocol_Handler;
+   --     User : Qt4.Variants.Q_Variant);
+   --  pragma Q_Signal (Emit_Typing_Notification_Signal);
+   --  Signal emits typing notification
+
+   procedure Emit_Message_Sent_Signal
+     (Self : not null access Protocol_Handler;
+      Msg  : Qt4.Variants.Q_Variant);
+   pragma Q_Signal (Emit_Message_Sent_Signal);
+   --  Signal emits message sent to somebody
+   --  end of message group
+
+   --  Roster management group
+
+   --  procedure Emit_User_Info_Recived_Signal
+   --    (Self : not null access Protocol_Handler;
+   --     Info : Qt4.Variants.Q_Variant);
+   --  pragma Q_Signal (Emit_User_Info_Recived_Signal);
+   --  --  Signal emits, when user info arrived
+
+   --  procedure Emit_User_Status_Changed_Signal
+   --    (Self : not null access Protocol_Handler;
+   --     User : Qt4.Variants.Q_Variant);
+   --  pragma Q_Signal (Emit_User_Status_Changed_Signal);
+   --  --  Signal Emits, when status changed of some user
+
+   --  End of Roster management group
+end UIM.Protocols.Handlers;
