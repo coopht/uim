@@ -40,25 +40,16 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with "qt_core";
-with "matreshka_league";
-with "uim_config";
 
-project Proto is
+project Proto_Moc is
 
-   for Languages use ("Ada");
-   for Library_Name use "uim_proto";
-   for Library_Kind use "dynamic";
+   for Languages use ("Amoc");
 
-   for Source_Dirs use ("../source/proto/", "../source/proto/.amoc");
+   for Source_Dirs use ("../source/proto");
    for Library_Dir use "../.libs";
-   for Object_Dir  use "../.objs";
+   for Object_Dir  use "../source/proto/.amoc";
 
-   package Compiler is
-      for Default_Switches ("Ada") use UIM_Config.Default_Switches;
-   end Compiler;
+   for Source_Files use
+    ("uim-protocols-handlers.ads");
 
-   package Builder is
-      for Global_Configuration_Pragmas use "qtada.adc";
-   end Builder;
-
-end Proto;
+end Proto_Moc;

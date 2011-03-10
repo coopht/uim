@@ -40,7 +40,9 @@
 ##  $Revision$ $Date$
 ##############################################################################
 all:
+	gprbuild -p -Pgnat/proto_moc.gpr
 	gprbuild -p -Pgnat/proto.gpr
 
 clean:
+	gprbuild -Pgnat/proto_moc.gpr
 	gprclean -Pgnat/proto.gpr
