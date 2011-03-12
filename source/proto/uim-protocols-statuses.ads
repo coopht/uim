@@ -39,6 +39,7 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Ada.Containers.Vectors;
 
 with League.Strings;
 
@@ -67,13 +68,32 @@ package UIM.Protocols.Statuses is
                         Name : League.Strings.Universal_String);
    --  sets status state
 
+   type Status_List is tagged private;
+
+   procedure Append (Self : in out Status_List; Val : Status'Class);
+
+   procedure Append (Self        : in out Status_List;
+                     Status_Name :        League.Strings.Universal_String;
+                     Id          :        Natural);
+
+   function Size (Self : Status_List) return Natural;
+
+   function Value (Self : Status_List; Pos : Natural) return Status'Class;
+
 private
 
    type Status is tagged record
      Status_Name : League.Strings.Universal_String;
      State       : League.Strings.Universal_String;
-     Status_Id   : Integer;
-      --  XXX should be special type for ID
+     Status_Id   : Natural;
+     --  XXX should be special type for ID
+   end record;
+
+   package Status_Items is
+      new Ada.Containers.Vectors (Natural, Status);
+
+   type Status_List is tagged record
+      Items : Status_Items.Vector;
    end record;
 
 end UIM.Protocols.Statuses;

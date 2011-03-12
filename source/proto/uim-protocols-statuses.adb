@@ -42,6 +42,29 @@
 
 package body UIM.Protocols.Statuses is
 
+   --------------
+   --  Append  --
+   --------------
+
+   procedure Append (Self : in out Status_List; Val : Status'Class) is
+   begin
+      Self.Items.Append (Status (Val));
+   end Append;
+
+   --------------
+   --  Append  --
+   --------------
+
+   procedure Append (Self        : in out Status_List;
+                     Status_Name :        League.Strings.Universal_String;
+                     Id          :        Natural)
+   is
+   begin
+      Self.Append (Status'(Status_Name => Status_Name,
+                           Status_Id => Id,
+                           State => League.Strings.Empty_Universal_String));
+   end Append;
+
    ----------
    --  Id  --
    ----------
@@ -90,6 +113,14 @@ package body UIM.Protocols.Statuses is
       Self.State := Name;
    end Set_State;
 
+   ------------
+   --  Size  --
+   ------------
+   function Size (Self : Status_List) return Natural is
+   begin
+      return Natural (Self.Items.Length);
+   end Size;
+
    -------------
    --  State  --
    -------------
@@ -98,5 +129,13 @@ package body UIM.Protocols.Statuses is
    begin
       return Self.State;
    end State;
+
+   -------------
+   --  Value  --
+   -------------
+   function Value (Self : Status_List; Pos : Natural) return Status'Class is
+   begin
+      return Self.Items.Element (Pos);
+   end Value;
 
 end UIM.Protocols.Statuses;
