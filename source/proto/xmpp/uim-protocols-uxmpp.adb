@@ -283,8 +283,8 @@ package body UIM.Protocols.UXMPP is
    --------------
    --  Set_Id  --
    --------------
-   overriding procedure Set_Id (Self : not null access UIM_XMPP;
-                                Id   : Positive) is
+   overriding procedure Set_Id (Self : not null access UIM_XMPP; Id : Positive)
+   is
    begin
       Self.Id := Id;
    end Set_Id;
