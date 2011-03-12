@@ -40,13 +40,37 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with League.Strings;
+
 with UIM.Protocols.Common;
 with UIM.Protocols.Handlers;
 with UIM.Protocols.Statuses;
 
+with UIM.Utils.Logger;
+
+with XMPP.Binds;
+with XMPP.IQ_Sessions;
+with XMPP.Presences;
+with XMPP.Rosters;
+with XMPP.Sessions;
+with XMPP.Services;
+with XMPP.Stream_Handlers;
+with XMPP.Stream_Features;
+with XMPP.Messages;
+with XMPP.Versions;
+
 package UIM.Protocols.UXMPP is
 
-   type UIM_XMPP is new UIM.Protocols.Common.Common_Protocol with private;
+   type UIM_XMPP is limited new XMPP.Sessions.XMPP_Session
+     and UIM.Protocols.Common.Common_Protocol
+     and XMPP.Stream_Handlers.XMPP_Stream_Handler with
+   record
+      Name    : League.Strings.Universal_String
+        := League.Strings.To_Universal_String ("xmpp");
+      Id      : Positive;
+      Handler : UIM.Protocols.Handlers.Protocol_Handler_Access
+        := UIM.Protocols.Handlers.Create;
+      Logger  : UIM.Utils.Logger.UIM_Logger;
+   end record;
 
    type UIM_XMPP_Access is access all UIM_XMPP'Class;
 
@@ -71,14 +95,43 @@ package UIM.Protocols.UXMPP is
    overriding procedure Set_Id (Self : not null access UIM_XMPP;
                                 Id   : Positive);
 
-private
+   --  XMPP Stream Handlers
 
-   type UIM_XMPP is new UIM.Protocols.Common.Common_Protocol with record
-      Name : League.Strings.Universal_String
-        := League.Strings.To_Universal_String ("xmpp");
-      Id   : Positive;
-      Handler : UIM.Protocols.Handlers.Protocol_Handler_Access
-        := new UIM.Protocols.Handlers.Protocol_Handler;
-   end record;
+   overriding procedure Connected
+     (Self   : in out UIM_XMPP;
+      Object : XMPP.Stream_Features.XMPP_Stream_Feature'Class);
+
+   overriding procedure Bind_Resource_State
+     (Self   : in out UIM_XMPP;
+      JID    : League.Strings.Universal_String;
+      Status : XMPP.Binds.Bind_State);
+
+   overriding procedure Session_State
+     (Self   : in out UIM_XMPP;
+      Status : XMPP.IQ_Sessions.Session_State);
+
+   overriding procedure Service_Information
+    (Self : in out UIM_XMPP;
+     Info : XMPP.Services.XMPP_Service'Class);
+
+   overriding procedure Presence
+     (Self : in out UIM_XMPP;
+      Data : XMPP.Presences.XMPP_Presence'Class);
+
+   overriding procedure Roster
+     (Self : in out UIM_XMPP;
+      Data : XMPP.Rosters.XMPP_Roster'Class);
+
+   overriding procedure Message
+     (Self : in out UIM_XMPP;
+      Msg  : XMPP.Messages.XMPP_Message'Class);
+
+   overriding procedure Version
+     (Self    : in out UIM_XMPP;
+      Version : XMPP.Versions.XMPP_Version'Class);
+
+   overriding procedure Version_Request
+     (Self    : in out UIM_XMPP;
+      Version : in out XMPP.Versions.XMPP_Version'Class);
 
 end UIM.Protocols.UXMPP;
