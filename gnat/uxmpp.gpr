@@ -39,9 +39,11 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with "utils";
 with "proto";
 with "matreshka_league";
 with "uim_config";
+with "axmpp";
 
 project UXMPP is
 

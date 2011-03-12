@@ -40,13 +40,15 @@
 ##  $Revision$ $Date$
 ##############################################################################
 all:
+	gprbuild -p -Pgnat/uxmpp.gpr
 	gprbuild -p -Pgnat/proto_moc.gpr
 	gprbuild -p -Pgnat/proto.gpr
 	gprbuild -p -Pgnat/uim_moc.gpr
 	gprbuild -p -Pgnat/uim.gpr
 
 clean:
-	gprbuild -Pgnat/proto_moc.gpr
+	gprclean -Pgnat/uxmpp.gpr
+	gprclean -Pgnat/proto_moc.gpr
 	gprclean -Pgnat/proto.gpr
 	gprclean -Pgnat/uim_moc.gpr
 	gprclean -Pgnat/uim.gpr
