@@ -49,8 +49,8 @@ package body UIM.Protocols.Registry is
 
    package Proto_Vectors is
       new Ada.Containers.Vectors
-           (Natural,
-            UIM.Protocols.Common.Common_Protocol_Access);
+     (Natural,
+      UIM.Protocols.Common.Common_Protocol_Access);
 
    type Proto_Registry is tagged record
       Protocols : Proto_Vectors.Vector;
@@ -63,7 +63,7 @@ package body UIM.Protocols.Registry is
    ------------
 
    function Item (Pos : Natural)
-      return not null access UIM.Protocols.Common.Common_Protocol is
+      return not null UIM.Protocols.Common.Common_Protocol_Access is
    begin
       return Reg.Protocols.Element (Pos);
    end Item;
@@ -73,7 +73,7 @@ package body UIM.Protocols.Registry is
    ----------------
 
    procedure Register
-    (Proto : not null access UIM.Protocols.Common.Common_Protocol) is
+    (Proto : not null UIM.Protocols.Common.Common_Protocol_Access) is
    begin
       Reg.Protocols.Append
        (UIM.Protocols.Common.Common_Protocol_Access (Proto));

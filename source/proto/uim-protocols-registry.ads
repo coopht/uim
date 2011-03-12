@@ -39,18 +39,17 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Ada.Containers.Vectors;
 
 with UIM.Protocols.Common;
 
 package UIM.Protocols.Registry is
 
    function Item (Pos : Natural)
-      return not null access UIM.Protocols.Common.Common_Protocol;
+      return not null UIM.Protocols.Common.Common_Protocol_Access;
 
    function Size return Natural;
 
    procedure Register
-     (Proto : not null access UIM.Protocols.Common.Common_Protocol);
+     (Proto : not null UIM.Protocols.Common.Common_Protocol_Access);
 
 end UIM.Protocols.Registry;
