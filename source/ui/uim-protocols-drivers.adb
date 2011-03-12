@@ -46,14 +46,13 @@ with UIM.Protocols.UXMPP;
 
 package body UIM.Protocols.Drivers is
 
-   Reg : UIM.Protocols.Registry.Proto_Registry;
-
    procedure Initialize is
       XMPP : UIM.Protocols.UXMPP.UIM_XMPP_Access
         := new UIM.Protocols.UXMPP.UIM_XMPP;
 
    begin
-      Reg.Register (UIM.Protocols.Common.Common_Protocol_Access (XMPP));
+      UIM.Protocols.Registry.Register
+       (UIM.Protocols.Common.Common_Protocol_Access (XMPP));
    end Initialize;
 
 end UIM.Protocols.Drivers;

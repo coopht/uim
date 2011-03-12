@@ -45,14 +45,27 @@ with UIM.Protocols.Common;
 
 package body UIM.Protocols.Registry is
 
+   use UIM.Protocols.Common;
+
+   package Proto_Vectors is
+      new Ada.Containers.Vectors
+           (Natural,
+            UIM.Protocols.Common.Common_Protocol_Access);
+
+   type Proto_Registry is tagged record
+      Protocols : Proto_Vectors.Vector;
+   end record;
+
+   Reg : Proto_Registry;
+
    ------------
    --  Item  --
    ------------
 
-   function Item (Self : Proto_Registry; Pos : Natural)
+   function Item (Pos : Natural)
       return not null access UIM.Protocols.Common.Common_Protocol is
    begin
-      return Self.Protocols.Element (Pos);
+      return Reg.Protocols.Element (Pos);
    end Item;
 
    ----------------
@@ -60,20 +73,19 @@ package body UIM.Protocols.Registry is
    ----------------
 
    procedure Register
-    (Self  : in out Proto_Registry;
-     Proto : not null access UIM.Protocols.Common.Common_Protocol) is
+    (Proto : not null access UIM.Protocols.Common.Common_Protocol) is
    begin
-      Self.Protocols.Append
-        (UIM.Protocols.Common.Common_Protocol_Access (Proto));
+      Reg.Protocols.Append
+       (UIM.Protocols.Common.Common_Protocol_Access (Proto));
    end Register;
 
    ------------
    --  Size  --
    ------------
 
-   function Size (Self : Proto_Registry) return Natural is
+   function Size return Natural is
    begin
-      return Natural (Self.Protocols.Length);
+      return Natural (Reg.Protocols.Length);
    end Size;
 
 end UIM.Protocols.Registry;

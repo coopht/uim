@@ -45,35 +45,12 @@ with UIM.Protocols.Common;
 
 package UIM.Protocols.Registry is
 
-   type Proto_Registry is tagged private;
-   --  XXX make this type finalization_controlled
-
-   type Proto_Registry_Access is access all Proto_Registry'Class;
-
-   function Item (Self : Proto_Registry; Pos : Natural)
+   function Item (Pos : Natural)
       return not null access UIM.Protocols.Common.Common_Protocol;
 
-   function Size (Self : Proto_Registry) return Natural;
+   function Size return Natural;
 
    procedure Register
-    (Self  : in out Proto_Registry;
-     Proto : not null access UIM.Protocols.Common.Common_Protocol);
-
-   --  procedure Delete
-   --   (Self  : in out Proto_Registry;
-   --    Proto : not null access UIM.Protocols.Common.Common_Protocol);
-
-private
-
-   use UIM.Protocols.Common;
-
-   package Proto_Vectors is
-      new Ada.Containers.Vectors
-           (Natural,
-            UIM.Protocols.Common.Common_Protocol_Access);
-
-   type Proto_Registry is tagged record
-      Protocols : Proto_Vectors.Vector;
-   end record;
+     (Proto : not null access UIM.Protocols.Common.Common_Protocol);
 
 end UIM.Protocols.Registry;
