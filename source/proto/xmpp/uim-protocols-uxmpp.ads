@@ -70,17 +70,23 @@ package UIM.Protocols.UXMPP is
       Handler : UIM.Protocols.Handlers.Protocol_Handler_Access
         := UIM.Protocols.Handlers.Create;
       Logger  : UIM.Utils.Logger.UIM_Logger;
+      St      :  UIM.Protocols.Statuses.Status_List;
    end record;
 
    type UIM_XMPP_Access is access all UIM_XMPP'Class;
 
+   function Create return not null UIM_XMPP_Access;
+
    overriding procedure Set_Status
     (Self   : not null access UIM_XMPP;
-     Status : not null access UIM.Protocols.Statuses.Status) is null;
+     Status : UIM.Protocols.Statuses.Status) is null;
+
+   overriding function Get_Status_List (Self : not null access UIM_XMPP)
+      return UIM.Protocols.Statuses.Status_List;
 
    overriding procedure Change_Status
     (Self   : not null access UIM_XMPP;
-     Status : League.Strings.Universal_String) is null;
+     Status : League.Strings.Universal_String);
 
    overriding function Get_Protocol_Handler
     (Self : not null access UIM_XMPP)

@@ -56,13 +56,17 @@ package UIM.Protocols.Foo is
       Handler : UIM.Protocols.Handlers.Protocol_Handler_Access
         := UIM.Protocols.Handlers.Create;
       Logger  : UIM.Utils.Logger.UIM_Logger;
+      St      : UIM.Protocols.Statuses.Status_List;
    end record;
 
    type UIM_Foo_Access is access all UIM_Foo;
 
    overriding procedure Set_Status
     (Self   : not null access UIM_Foo;
-     Status : not null access UIM.Protocols.Statuses.Status) is null;
+     Status : UIM.Protocols.Statuses.Status) is null;
+
+   overriding function Get_Status_List (Self : not null access UIM_Foo)
+      return UIM.Protocols.Statuses.Status_List;
 
    overriding procedure Change_Status
     (Self   : not null access UIM_Foo;

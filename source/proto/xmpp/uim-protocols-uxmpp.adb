@@ -20,7 +20,7 @@
 --    notice, this list of conditions and the following disclaimer in the   --
 --    documentation and/or other materials provided with the distribution.  --
 --                                                                          --
---  * Neither the name of the Alexander Basov, IE nor the names of its        --
+--  * Neither the name of the Alexander Basov, IE nor the names of its      --
 --    contributors may be used to endorse or promote products derived from  --
 --    this software without specific prior written permission.              --
 --                                                                          --
@@ -74,6 +74,39 @@ package body UIM.Protocols.UXMPP is
 
    end Bind_Resource_State;
 
+   ---------------------
+   --  Change_Status  --
+   ---------------------
+
+   overriding procedure Change_Status
+    (Self   : not null access UIM_XMPP;
+     Status : League.Strings.Universal_String) is
+   begin
+      if Status = League.Strings.To_Universal_String ("Online") then
+         Self.Logger.Log ("Connecting");
+         --  Self.Set_JID (League.Strings.To_Universal_String
+         --    (Params.Get_Login.To_Ucs_4));
+
+         --  For local testing
+
+         Self.Set_JID
+           (League.Strings.To_Universal_String ("uim-test@zion"));
+
+         --  Self.Set_Password (League.Strings.To_Universal_String
+         --      (Params.Get_Password.To_Ucs_4));
+
+         Self.Set_Password
+           (League.Strings.To_Universal_String ("123"));
+
+         --  for jabber.ru testing
+         --  Self.Set_Password
+         --    (League.Strings.To_Universal_String ("123456"));
+
+         Self.Set_Stream_Handler (Self);
+         Self.Open;
+      end if;
+   end Change_Status;
+
    -----------------
    --  Connected  --
    -----------------
@@ -86,6 +119,21 @@ package body UIM.Protocols.UXMPP is
       Self.Logger.Log ("Yeah We are connected, binding resource");
       Self.Bind_Resource (League.Strings.To_Universal_String ("uim-ada"));
    end Connected;
+
+   --------------
+   --  Create  --
+   --------------
+   function Create return not null UIM_XMPP_Access is
+      Self : constant not null UIM_XMPP_Access := new UIM_XMPP;
+
+   begin
+      --  Self.CL := new UIM.Protocols.Contact_Lists.Contact_List;
+
+      Self.St.Append (+"Online", 0);
+      Self.St.Append (+"Offline", 1);
+
+      return Self;
+   end Create;
 
    --------------
    --  Get_Id  --
@@ -116,6 +164,16 @@ package body UIM.Protocols.UXMPP is
    begin
       return Self.Handler;
    end Get_Protocol_Handler;
+
+   -----------------------
+   --  Get_Status_List  --
+   -----------------------
+
+   overriding function Get_Status_List (Self : not null access UIM_XMPP)
+      return UIM.Protocols.Statuses.Status_List is
+   begin
+      return Self.St;
+   end Get_Status_List;
 
    ---------------
    --  Message  --

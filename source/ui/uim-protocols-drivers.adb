@@ -49,7 +49,7 @@ package body UIM.Protocols.Drivers is
 
    procedure Initialize is
       XMPP : UIM.Protocols.UXMPP.UIM_XMPP_Access
-        := new UIM.Protocols.UXMPP.UIM_XMPP;
+        := UIM.Protocols.UXMPP.Create;
 
       Foo  : UIM.Protocols.Foo.UIM_Foo_Access
         := new UIM.Protocols.Foo.UIM_Foo;

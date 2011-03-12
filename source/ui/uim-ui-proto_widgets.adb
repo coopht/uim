@@ -47,6 +47,7 @@ with League.Strings;
 with Qt4.Combo_Boxes.Constructors;
 with Qt4.H_Box_Layouts.Constructors;
 with Qt4.Objects;
+with Qt4.Strings;
 with Qt4.Tool_Buttons.Constructors;
 with Qt4.Tree_Views.Constructors;
 with Qt4.V_Box_Layouts.Constructors;
@@ -93,8 +94,6 @@ package body UIM.UI.Proto_Widgets is
         constant not null access Qt4.H_Box_Layouts.Q_H_Box_Layout'Class
           := Qt4.H_Box_Layouts.Constructors.Create;
 
-      --  List : access UIM.Protocols.Statuses.Lists.Status_List;
-
    begin
       Qt4.Widgets.Directors.Constructors.Initialize (Self);
       Self.Contact_List := Qt4.Tree_Views.Constructors.Create;
@@ -109,13 +108,15 @@ package body UIM.UI.Proto_Widgets is
       --  XXX not yet implemented in QtAda
       --  Self.Status_Box.Add_Items (Self.Proto.Get_List_Of_Statuses);
       --  Self.Contact_List.Set_Model (Self.Proto.Get_Contact_List.Get_Model);
-      --  List := Self.Proto.Get_Status_List;
 
-      --  for I in 0 .. List.Size - 1 loop
-      --     Self.Status_Box.Add_Item (List.Value (I).Get_Name);
-      --  end loop;
+      for J in 0 .. Self.Proto.Get_Status_List.Size - 1 loop
+         Self.Status_Box.Add_Item
+           (Qt4.Strings.From_Ucs_4
+             (Self.Proto.Get_Status_List.Value (J).Name.To_Wide_Wide_String));
+      end loop;
 
-      --  Self.Status_Box.Set_Current_Index (Qt4.Q_Integer (List.Size - 1));
+      Self.Status_Box.Set_Current_Index
+       (Qt4.Q_Integer (Self.Proto.Get_Status_List.Size - 1));
 
       H_Layout.Add_Widget (Self.Status_Box);
       H_Layout.Add_Widget (Self.Menu_Button);

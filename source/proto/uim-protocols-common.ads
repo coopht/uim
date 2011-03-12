@@ -55,12 +55,16 @@ package UIM.Protocols.Common is
 
    not overriding procedure Set_Status
     (Self   : not null access Common_Protocol;
-     Status : not null access UIM.Protocols.Statuses.Status) is abstract;
+     Status : UIM.Protocols.Statuses.Status) is abstract;
 
    not overriding procedure Change_Status
     (Self   : not null access Common_Protocol;
      Status : League.Strings.Universal_String) is abstract;
    --  XXX: Rewrite with appropriate types
+
+   not overriding function Get_Status_List
+    (Self : not null access Common_Protocol)
+       return UIM.Protocols.Statuses.Status_List is abstract;
 
    not overriding function Get_Protocol_Handler
     (Self : not null access Common_Protocol)

@@ -78,6 +78,16 @@ package body UIM.Protocols.Foo is
       return Self.Handler;
    end Get_Protocol_Handler;
 
+   -----------------------
+   --  Get_Status_List  --
+   -----------------------
+
+   overriding function Get_Status_List (Self : not null access UIM_Foo)
+      return UIM.Protocols.Statuses.Status_List is
+   begin
+      return Self.St;
+   end Get_Status_List;
+
    --------------
    --  Set_Id  --
    --------------
