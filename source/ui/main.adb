@@ -40,8 +40,10 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with UIM.UI;
+with UIM.Protocols.Drivers;
 
 procedure Main is
 begin
+   UIM.Protocols.Drivers.Initialize;
    UIM.UI.Start_Gui;
 end Main;
