@@ -39,8 +39,6 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Ada.Containers.Vectors;
-
 with League.Strings;
 
 with UIM.Protocols.Handlers;
@@ -53,7 +51,7 @@ package UIM.Protocols.Common is
 
    type Common_Protocol is limited interface;
 
-   type Common_Protocol_Access is access all Common_Protocol;
+   type Common_Protocol_Access is access all Common_Protocol'Class;
 
    not overriding procedure Set_Status
     (Self   : not null access Common_Protocol;
