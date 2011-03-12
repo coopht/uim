@@ -40,7 +40,8 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with Qt4.Main_Windows;
-private with Qt4.Main_Windows.Directors;
+with Qt4.Main_Windows.Directors;
+with Qt4.Tab_Widgets;
 
 package UIM.UI.Main_Windows is
 
@@ -54,7 +55,7 @@ private
 
    type Main_Window is
       limited new Qt4.Main_Windows.Directors.Q_Main_Window_Director with record
-     null;
+        Central_Widget  : Qt4.Tab_Widgets.Q_Tab_Widget_Access;
    end record;
 
 end UIM.UI.Main_Windows;

@@ -39,21 +39,43 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Qt4.Main_Windows;
-private with Qt4.Main_Windows.Directors;
+with Qt4.Strings;
+with Qt4.Tab_Widgets.Constructors;
+
+with UIM.Protocols.Registry;
 
 with UIM.UI.Main_Windows.MOC;
 pragma Warnings (Off, UIM.UI.Main_Windows.MOC);
 --  Child package MOC must be included in the executable file.
 
+with UIM.UI.Proto_Widgets;
+
 package body UIM.UI.Main_Windows is
+
+   use Qt4;
 
    function Create return not null Main_Window_Access is
       Self   : constant Main_Window_Access := new Main_Window;
 
+      Tab_Id : Q_Integer;
+      pragma Warnings (Off, Tab_Id);
+
    begin
       --  Initialize director
       Qt4.Main_Windows.Directors.Constructors.Initialize (Self);
+
+      --  Create main_window central widget
+      Self.Central_Widget := Qt4.Tab_Widgets.Constructors.Create;
+      Self.Central_Widget.Set_Tab_Position (Qt4.Tab_Widgets.East);
+
+      for J in 0 .. UIM.Protocols.Registry.Size - 1 loop
+         Tab_Id :=
+           Self.Central_Widget.Add_Tab
+           (UIM.UI.Proto_Widgets.Create (UIM.Protocols.Registry.Item (J)),
+            Qt4.Strings.From_Ucs_4
+             (UIM.Protocols.Registry.Item (J).Get_Name.To_Wide_Wide_String));
+      end loop;
+
       return Self;
    end Create;
 
