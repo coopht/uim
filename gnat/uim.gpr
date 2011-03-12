@@ -43,6 +43,7 @@ with "uim_config";
 with "proto";
 with "qt_gui";
 with "uxmpp";
+with "foo";
 
 project uim is
    for Main use ("main.adb");

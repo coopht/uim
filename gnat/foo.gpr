@@ -37,29 +37,29 @@
 -- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.             --
 --                                                                          --
 ------------------------------------------------------------------------------
---  $Revision$ $Date$
+--  $Revision: 33 $ $Date: 2011-03-12 21:08:30 +0300 (Сбт, 12 Мар 2011) $
 ------------------------------------------------------------------------------
+with "utils";
+with "proto";
+with "matreshka_league";
+with "uim_config";
 
-with UIM.Protocols.Common;
-with UIM.Protocols.Registry;
-with UIM.Protocols.UXMPP;
-with UIM.Protocols.Foo;
+project FOO is
 
-package body UIM.Protocols.Drivers is
+   for Languages use ("Ada");
+   for Library_Name use "libfoo";
+   for Library_Kind use "dynamic";
 
-   procedure Initialize is
-      XMPP : UIM.Protocols.UXMPP.UIM_XMPP_Access
-        := new UIM.Protocols.UXMPP.UIM_XMPP;
+   for Source_Dirs use ("../source/proto/foo");
+   for Library_Dir use "../.libs";
+   for Object_Dir  use "../.objs";
 
-      Foo  : UIM.Protocols.Foo.UIM_Foo_Access
-        := new UIM.Protocols.Foo.UIM_Foo;
+   package Compiler is
+      for Default_Switches ("Ada") use UIM_Config.Default_Switches;
+   end Compiler;
 
-   begin
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (XMPP));
+   package Builder is
+      for Global_Configuration_Pragmas use "qtada.adc";
+   end Builder;
 
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (Foo));
-   end Initialize;
-
-end UIM.Protocols.Drivers;
+end FOO;

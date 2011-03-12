@@ -39,27 +39,46 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with League.Strings;
 
 with UIM.Protocols.Common;
-with UIM.Protocols.Registry;
-with UIM.Protocols.UXMPP;
-with UIM.Protocols.Foo;
+with UIM.Protocols.Handlers;
+with UIM.Protocols.Statuses;
+with UIM.Utils.Logger;
 
-package body UIM.Protocols.Drivers is
+package UIM.Protocols.Foo is
 
-   procedure Initialize is
-      XMPP : UIM.Protocols.UXMPP.UIM_XMPP_Access
-        := new UIM.Protocols.UXMPP.UIM_XMPP;
+   type UIM_Foo is limited new UIM.Protocols.Common.Common_Protocol with
+   record
+      Name    : League.Strings.Universal_String
+        := League.Strings.To_Universal_String ("foo");
+      Id      : Positive;
+      Handler : UIM.Protocols.Handlers.Protocol_Handler_Access
+        := UIM.Protocols.Handlers.Create;
+      Logger  : UIM.Utils.Logger.UIM_Logger;
+   end record;
 
-      Foo  : UIM.Protocols.Foo.UIM_Foo_Access
-        := new UIM.Protocols.Foo.UIM_Foo;
+   type UIM_Foo_Access is access all UIM_Foo;
 
-   begin
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (XMPP));
+   overriding procedure Set_Status
+    (Self   : not null access UIM_Foo;
+     Status : not null access UIM.Protocols.Statuses.Status) is null;
 
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (Foo));
-   end Initialize;
+   overriding procedure Change_Status
+    (Self   : not null access UIM_Foo;
+     Status : League.Strings.Universal_String) is null;
 
-end UIM.Protocols.Drivers;
+   overriding function Get_Protocol_Handler
+    (Self : not null access UIM_Foo)
+      return not null UIM.Protocols.Handlers.Protocol_Handler_Access;
+
+   overriding function Get_Name (Self : not null access UIM_Foo)
+      return League.Strings.Universal_String;
+
+   overriding function Get_Id (Self : not null access UIM_Foo)
+      return Positive;
+
+   overriding procedure Set_Id (Self : not null access UIM_Foo;
+                                Id   : Positive);
+
+end UIM.Protocols.Foo;

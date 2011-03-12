@@ -41,6 +41,7 @@
 ##############################################################################
 all:
 	gprbuild -p -Pgnat/uxmpp.gpr
+	gprbuild -p -Pgnat/foo.gpr
 	gprbuild -p -Pgnat/proto_moc.gpr
 	gprbuild -p -Pgnat/proto.gpr
 	gprbuild -p -Pgnat/uim_moc.gpr
@@ -48,6 +49,7 @@ all:
 
 clean:
 	gprclean -Pgnat/uxmpp.gpr
+	gprclean -Pgnat/foo.gpr
 	gprclean -Pgnat/proto_moc.gpr
 	gprclean -Pgnat/proto.gpr
 	gprclean -Pgnat/uim_moc.gpr

@@ -39,27 +39,53 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with League.Strings;
 
 with UIM.Protocols.Common;
-with UIM.Protocols.Registry;
-with UIM.Protocols.UXMPP;
-with UIM.Protocols.Foo;
+with UIM.Protocols.Handlers;
+with UIM.Utils.Logger;
 
-package body UIM.Protocols.Drivers is
+package body UIM.Protocols.Foo is
 
-   procedure Initialize is
-      XMPP : UIM.Protocols.UXMPP.UIM_XMPP_Access
-        := new UIM.Protocols.UXMPP.UIM_XMPP;
+   --------------
+   --  Get_Id  --
+   --------------
 
-      Foo  : UIM.Protocols.Foo.UIM_Foo_Access
-        := new UIM.Protocols.Foo.UIM_Foo;
-
+   overriding function Get_Id (Self : not null access UIM_Foo)
+      return Positive is
    begin
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (XMPP));
+      return Self.Id;
+   end Get_Id;
 
-      UIM.Protocols.Registry.Register
-       (UIM.Protocols.Common.Common_Protocol_Access (Foo));
-   end Initialize;
+   ----------------
+   --  Get_Name  --
+   ----------------
 
-end UIM.Protocols.Drivers;
+   overriding function Get_Name (Self : not null access UIM_Foo)
+      return League.Strings.Universal_String is
+   begin
+      return Self.Name;
+   end Get_Name;
+
+   ----------------------------
+   --  Get_Protocol_Handler  --
+   ----------------------------
+
+   overriding function Get_Protocol_Handler
+    (Self : not null access UIM_Foo)
+      return not null UIM.Protocols.Handlers.Protocol_Handler_Access is
+   begin
+      return Self.Handler;
+   end Get_Protocol_Handler;
+
+   --------------
+   --  Set_Id  --
+   --------------
+
+   overriding procedure Set_Id (Self : not null access UIM_Foo;
+                                Id   : Positive) is
+   begin
+      Self.Id := Id;
+   end Set_Id;
+
+end UIM.Protocols.Foo;
