@@ -49,6 +49,7 @@ project UIM_Main_Window_Moc is
 
    for Object_Dir use "../source/ui/.amoc";
 
-   for Source_Files use ("uim-ui-main_windows.ads");
+   for Source_Files use ("uim-ui-main_windows.ads",
+       		    	 "uim-ui-proto_widgets.ads");
 
 end UIM_Main_Window_Moc;
