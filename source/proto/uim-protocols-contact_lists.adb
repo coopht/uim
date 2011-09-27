@@ -39,62 +39,97 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Qt4.Strings;
+with Ada.Wide_Wide_Text_IO;
+with Qt4.Model_Indices;
 
-with Qt4.Objects;
-private with Qt4.Objects.Directors;
+with UIM.Protocols.Contact_List_Items;
 
-with UIM.Protocols.Contact_List_Models;
-with UIM.Protocols.Groups;
-with UIM.Protocols.Users;
+package body UIM.Protocols.Contact_Lists is
 
-package UIM.Protocols.Contact_Lists is
-
-   type Contact_List is limited new Qt4.Objects.Q_Object with private;
-
-   type Contact_List_Access is access all Contact_List;
+   use Qt4;
+   use type Qt4.Strings.Q_String;
 
    --  public API
 
-   procedure Add_User
-     (Self  : not null access Contact_List;
-      User  : not null access UIM.Protocols.Users.User;
-      Group :          access UIM.Protocols.Groups.Group := null);
-   --  Add user to group from contact list.
-   --  if group does not exists, or it does not specified, user added to
-   --  contact list without group
-
-   procedure Add_User
-     (Self  : not null access Contact_List;
-      User  : not null access UIM.Protocols.Users.User;
-      Group : Qt4.Strings.Q_String);
-   --  Add user to group with Group_ID from contact list.
-   --  if group does not exists, or it does not specified, user added to
-   --  contact list without group
+   -----------------
+   --  Add_Group  --
+   -----------------
 
    procedure Add_Group
      (Self  : not null access Contact_List;
-      Group : not null access UIM.Protocols.Groups.Group);
-   --  Add new group to contact list
+      Group : not null access UIM.Protocols.Groups.Group) is
+   begin
+      Self.Model.Add_Item (Child => Group);
+   end Add_Group;
 
-   procedure Remove_Group
+   ----------------
+   --  Add_User  --
+   ----------------
+
+   procedure Add_User
      (Self  : not null access Contact_List;
-      Group : not null access UIM.Protocols.Groups.Group);
-   --  Remove group from contact list
+      User  : not null access UIM.Protocols.Users.User;
+      Group :          access UIM.Protocols.Groups.Group := null) is
+   begin
+      Self.Model.Add_Item (Group, User);
+   end Add_User;
+
+   ----------------
+   --  Add_User  --
+   ----------------
+
+   procedure Add_User
+     (Self  : not null access Contact_List;
+      User  : not null access UIM.Protocols.Users.User;
+      Group : Qt4.Strings.Q_String) is
+   begin
+      for Row in 0 .. Self.Model.Row_Count (Qt4.Model_Indices.Create) - 1 loop
+         declare
+            Index : constant Qt4.Model_Indices.Q_Model_Index
+              := Self.Model.Index (Row, 0, Qt4.Model_Indices.Create);
+
+            Item : UIM.Protocols.Groups.Group_Access
+              := UIM.Protocols.Groups.Group_Access
+                  (Self.Model.To_Item (Index));
+
+         begin
+            Ada.Wide_Wide_Text_IO.Put_Line ("!!!!!!!! : "
+                                              & Group.To_Ucs_4);
+
+            if Group.Is_Empty then
+               Item.Append_Child
+                (UIM.Protocols.Contact_List_Items.Contact_List_Item_Access
+                  (User));
+
+            else
+               if Item.Name = Group then
+                  Item.Append_Child
+                    (UIM.Protocols.Contact_List_Items.Contact_List_Item_Access
+                      (User));
+               end if;
+            end if;
+         end;
+      end loop;
+   end Add_User;
+
+   -----------------
+   --  Get_Model  --
+   -----------------
 
    function Get_Model (Self  : not null access Contact_List)
-     return not null access UIM.Protocols.Contact_List_Models.Contact_List_Model;
+      return not null access UIM.Protocols.Contact_List_Models.Contact_List_Model is
+   begin
+      return Self.Model;
+   end Get_Model;
 
-private
-
-   type Contact_List is limited new Qt4.Objects.Directors.Q_Object_Director
-     with record
-        Show_Offline_Contacts : Boolean := False;
-        Show_Empty_Groups : Boolean := False;
-        Show_Groups : Boolean := False;
-
-        Model : UIM.Protocols.Contact_List_Models.Contact_List_Model_Access
-          := UIM.Protocols.Contact_List_Models.Create;
-   end record;
+   --------------------
+   --  Remove_Group  --
+   --------------------
+   procedure Remove_Group
+     (Self  : not null access Contact_List;
+      Group : not null access UIM.Protocols.Groups.Group) is
+   begin
+      null;
+   end Remove_Group;
 
 end UIM.Protocols.Contact_Lists;
