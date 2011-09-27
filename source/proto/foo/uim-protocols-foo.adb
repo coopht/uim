@@ -47,6 +47,16 @@ with UIM.Utils.Logger;
 
 package body UIM.Protocols.Foo is
 
+   ------------------------
+   --  Get_Contact_List  --
+   ------------------------
+
+   overriding function Get_Contact_List (Self : not null access UIM_Foo)
+      return UIM.Protocols.Contact_Lists.Contact_List_Access is
+   begin
+      return null;
+   end Get_Contact_List;
+
    --------------
    --  Get_Id  --
    --------------
