@@ -42,6 +42,7 @@
 with League.Strings;
 
 with UIM.Protocols.Common;
+with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Handlers;
 with UIM.Protocols.Statuses;
 
@@ -71,6 +72,7 @@ package UIM.Protocols.UXMPP is
         := UIM.Protocols.Handlers.Create;
       Logger  : UIM.Utils.Logger.UIM_Logger;
       St      :  UIM.Protocols.Statuses.Status_List;
+      CL      : UIM.Protocols.Contact_Lists.Contact_List_Access;
    end record;
 
    type UIM_XMPP_Access is access all UIM_XMPP'Class;
@@ -83,6 +85,9 @@ package UIM.Protocols.UXMPP is
 
    overriding function Get_Status_List (Self : not null access UIM_XMPP)
       return UIM.Protocols.Statuses.Status_List;
+
+   overriding function Get_Contact_List (Self : not null access UIM_XMPP)
+      return UIM.Protocols.Contact_Lists.Contact_List_Access;
 
    overriding procedure Change_Status
     (Self   : not null access UIM_XMPP;
@@ -110,7 +115,7 @@ package UIM.Protocols.UXMPP is
    overriding procedure Bind_Resource_State
      (Self   : in out UIM_XMPP;
       JID    : League.Strings.Universal_String;
-      Status : XMPP.Binds.Bind_State);
+      Status : XMPP.Bind_State);
 
    overriding procedure Session_State
      (Self   : in out UIM_XMPP;

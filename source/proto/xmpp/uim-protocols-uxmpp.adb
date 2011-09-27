@@ -39,9 +39,12 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Qt4.Strings;
 
-with XMPP.IQS;
+with UIM.Protocols.Informations;
+with UIM.Protocols.Users;
 
+with XMPP.Logger;
 package body UIM.Protocols.UXMPP is
 
    use type League.Strings.Universal_String;
@@ -59,12 +62,12 @@ package body UIM.Protocols.UXMPP is
    overriding procedure Bind_Resource_State
      (Self   : in out UIM_XMPP;
       JID    : League.Strings.Universal_String;
-      Status : XMPP.Binds.Bind_State)
+      Status : XMPP.Bind_State)
    is
-      use type XMPP.Binds.Bind_State;
+      use type XMPP.Bind_State;
 
    begin
-      if Status = XMPP.Binds.Success then
+      if Status = XMPP.Success then
          Self.Logger.Log
           ("Resource Binded Success: " & JID.To_Wide_Wide_String);
 
@@ -127,13 +130,24 @@ package body UIM.Protocols.UXMPP is
       Self : constant not null UIM_XMPP_Access := new UIM_XMPP;
 
    begin
-      --  Self.CL := new UIM.Protocols.Contact_Lists.Contact_List;
+      XMPP.Logger.Enable_Debug;
+      Self.CL := new UIM.Protocols.Contact_Lists.Contact_List;
 
       Self.St.Append (+"Online", 0);
       Self.St.Append (+"Offline", 1);
 
       return Self;
    end Create;
+
+   ------------------------
+   --  Get_Contact_List  --
+   ------------------------
+
+   overriding function Get_Contact_List (Self : not null access UIM_XMPP)
+      return UIM.Protocols.Contact_Lists.Contact_List_Access is
+   begin
+      return Self.CL;
+   end Get_Contact_List;
 
    --------------
    --  Get_Id  --
@@ -278,30 +292,35 @@ package body UIM.Protocols.UXMPP is
    overriding procedure Roster
      (Self : in out UIM_XMPP;
       Data : XMPP.Rosters.XMPP_Roster'Class) is
-      P : XMPP.Presences.XMPP_Presence;
+      P    : XMPP.Presences.XMPP_Presence;
 
    begin
-      Self.Logger.Log ("Roster Arrived");
+      Self.Logger.Log (" >>>>>>>>>>>>>>>>>>>> Roster Arrived");
+      Self.Logger.Log ("Proto ID = " & Natural'Wide_Wide_Image (Self.Id));
 
-      --  for J in 0 .. Data.Items_Count - 1 loop
-      --     declare
-      --        Res_User : constant UIM.Protocols.Users.User_Access
-      --          := new UIM.Protocols.Users.User (Self.Proto_Id);
-      --        Info : constant UIM.Protocols.User_Infos.User_Info_Access
-      --          := new UIM.Protocols.User_Infos.User_Info;
+      for J in 0 .. Data.Items_Count - 1 loop
+         declare
+            User : constant UIM.Protocols.Users.User_Access
+              := new UIM.Protocols.Users.User (Self.Id);
 
-      --     begin
-      --        Info.Set_ID
-      --         (Qt4.Strings.From_Ucs_4
-      --           (Data.Item_At (J).Get_JID.To_Wide_Wide_String));
+            Info : UIM.Protocols.Informations.Information;
 
-      --        Res_User.Set_Info (Info);
-      --        Self.CL.Add_User (Res_User, null);
-      --     end;
-      --  end loop;
+         begin
+            Self.Logger.Log
+              ("Adding user : "
+                 & Data.Item_At (J).Get_JID.To_Wide_Wide_String);
 
-      --  --  Sending Presence roster
-      --  Self.Send_Object (P);
+            Info.Set_Id
+             (Qt4.Strings.From_Ucs_4
+               (Data.Item_At (J).Get_JID.To_Wide_Wide_String));
+
+            User.Set_Information (Info);
+            Self.CL.Add_User (User);
+         end;
+      end loop;
+
+      --  Sending Presence roster
+      Self.Send_Object (P);
    end Roster;
 
    ---------------------------
@@ -382,7 +401,7 @@ package body UIM.Protocols.UXMPP is
 
    begin
       Self.Logger.Log ("Version_Requested");
-      Ver.Set_IQ_Kind (XMPP.IQS.Result);
+      Ver.Set_IQ_Kind (XMPP.Result);
       Ver.Set_To (Version.Get_From);
       Ver.Set_Name (+"uim");
       Ver.Set_OS (+"Linux");
