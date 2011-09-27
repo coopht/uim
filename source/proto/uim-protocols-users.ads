@@ -48,7 +48,7 @@ package UIM.Protocols.Users is
    type User is new UIM.Protocols.Contact_List_Items.Contact_List_Item
      with private;
 
-   type User_Access is access all User'Class;
+   type User_Access is access all User;
 
    procedure Set_Information (Self : in out User;
                               Info : UIM.Protocols.Informations.Information);
