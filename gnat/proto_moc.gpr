@@ -50,6 +50,7 @@ project Proto_Moc is
    for Object_Dir  use "../source/proto/.amoc";
 
    for Source_Files use
-    ("uim-protocols-handlers.ads");
+    ("uim-protocols-handlers.ads",
+     "uim-protocols-contact_list_models.ads");
 
 end Proto_Moc;
