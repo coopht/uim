@@ -41,11 +41,9 @@
 ------------------------------------------------------------------------------
 with Ada.Containers.Vectors;
 
-with UIM.Protocols.Common;
-
 package body UIM.Protocols.Registry is
 
-   use UIM.Protocols.Common;
+   use type UIM.Protocols.Common.Common_Protocol_Access;
 
    package Proto_Vectors is
       new Ada.Containers.Vectors
