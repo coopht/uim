@@ -43,8 +43,6 @@ with Qt4.Objects;
 private with Qt4.Objects.Directors;
 with Qt4.Variants;
 
-with UIM.Protocols.Contact_List_Models;
-
 package UIM.Protocols.Handlers is
 
    type Protocol_Handler is limited new Qt4.Objects.Q_Object with private;
