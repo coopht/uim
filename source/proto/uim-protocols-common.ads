@@ -41,6 +41,7 @@
 ------------------------------------------------------------------------------
 with League.Strings;
 
+with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Handlers;
 with UIM.Protocols.Statuses;
 
@@ -85,5 +86,10 @@ package UIM.Protocols.Common is
                                     Id   : Positive) is abstract;
    --  this function is called, when protocols registry adds implementor to
    --  the list of used protocols, and sets assigned id.
+
+   not overriding
+   function Get_Contact_List (Self : not null access Common_Protocol)
+      return UIM.Protocols.Contact_Lists.Contact_List_Access is abstract;
+   --  This function returns contact list for specified protocol.
 
 end UIM.Protocols.Common;
