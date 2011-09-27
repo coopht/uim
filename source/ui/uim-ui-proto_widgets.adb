@@ -58,6 +58,7 @@ with UIM.UI.Proto_Widgets.MOC;
 pragma Warnings (Off, UIM.UI.Proto_Widgets.MOC);
 --  Child package MOC must be included in the executable file.
 
+with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Contact_List_Items;
 with UIM.Protocols.Messages;
 --  with UIM.Protocols.Statuses.Lists;
@@ -72,6 +73,7 @@ package body UIM.UI.Proto_Widgets is
    use type Qt4.Q_Integer;
    --  use type UIM.UI.Chat_Windows.Chat_Window_Access;
    use UIM.Protocols.Contact_List_Items;
+   use type UIM.Protocols.Contact_Lists.Contact_List_Access;
 
    package Convert is
       new System.Address_To_Access_Conversions
@@ -107,7 +109,9 @@ package body UIM.UI.Proto_Widgets is
 
       --  XXX not yet implemented in QtAda
       --  Self.Status_Box.Add_Items (Self.Proto.Get_List_Of_Statuses);
-      --  Self.Contact_List.Set_Model (Self.Proto.Get_Contact_List.Get_Model);
+      if Self.Proto.Get_Contact_List /= null then
+         Self.Contact_List.Set_Model (Self.Proto.Get_Contact_List.Get_Model);
+      end if;
 
       for J in 0 .. Self.Proto.Get_Status_List.Size - 1 loop
          Self.Status_Box.Add_Item
