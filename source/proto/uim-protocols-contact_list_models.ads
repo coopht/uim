@@ -48,6 +48,8 @@ with UIM.Protocols.Contact_List_Items;
 
 package UIM.Protocols.Contact_List_Models is
 
+   use UIM.Protocols.Contact_List_Items;
+
    type Contact_List_Model is limited
      new Qt4.Abstract_Item_Models.Q_Abstract_Item_Model
      with private;
@@ -55,6 +57,16 @@ package UIM.Protocols.Contact_List_Models is
    type Contact_List_Model_Access is access all Contact_List_Model;
 
    function Create return Contact_List_Model_Access;
+
+   function To_Item
+    (Self  : not null access constant Contact_List_Model'Class;
+     Index : Qt4.Model_Indices.Q_Model_Index)
+       return UIM.Protocols.Contact_List_Items.Contact_List_Item_Access;
+
+   procedure Add_Item
+    (Self   : not null access Contact_List_Model;
+     Parent :          access Contact_List_Item'Class := null;
+     Child  : not null access Contact_List_Item'Class);
 
 private
 
@@ -90,8 +102,8 @@ private
    overriding function Index
     (Self   : not null access constant Contact_List_Model;
      Row    : Qt4.Q_Integer;
-     Column : Qt4.Q_Integer;
-     Parent : Qt4.Model_Indices.Q_Model_Index)
+     Column : Qt4.Q_Integer := 0;
+     Parent : Qt4.Model_Indices.Q_Model_Index := Qt4.Model_Indices.Create)
        return Qt4.Model_Indices.Q_Model_Index;
 
    overriding function Parent
@@ -103,10 +115,5 @@ private
     (Self   : not null access constant Contact_List_Model;
      Parent : Qt4.Model_Indices.Q_Model_Index)
        return Qt4.Q_Integer;
-
-   function To_Item
-    (Self  : not null access constant Contact_List_Model'Class;
-     Index : Qt4.Model_Indices.Q_Model_Index)
-       return UIM.Protocols.Contact_List_Items.Contact_List_Item_Access;
 
 end UIM.Protocols.Contact_List_Models;

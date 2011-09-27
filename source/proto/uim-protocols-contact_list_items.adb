@@ -20,7 +20,7 @@
 --    notice, this list of conditions and the following disclaimer in the   --
 --    documentation and/or other materials provided with the distribution.  --
 --                                                                          --
---  * Neither the name of the Alexander Basov, IE nor the names of its        --
+--  * Neither the name of the Alexander Basov, IE nor the names of its      --
 --    contributors may be used to endorse or promote products derived from  --
 --    this software without specific prior written permission.              --
 --                                                                          --
@@ -66,6 +66,16 @@ package body UIM.Protocols.Contact_List_Items is
       return Self.Children.Element (Integer (Pos));
    end Child_At;
 
+   ----------------
+   --  Children  --
+   ----------------
+
+   function Children (Self : Contact_List_Item)
+      return Contact_List_Item_Vectors.Vector is
+   begin
+      return Self.Children;
+   end Children;
+
    -----------------------
    --  Children_Length  --
    -----------------------
@@ -74,6 +84,30 @@ package body UIM.Protocols.Contact_List_Items is
    begin
       return Qt4.Q_Integer (Self.Children.Length);
    end Children_Length;
+
+   --------------------
+   --  Column_Count  --
+   --------------------
+
+   function Column_Count (Self : Contact_List_Item)
+      return Qt4.Q_Integer is
+      pragma Unreferenced (Self);
+
+   begin
+      return 1;
+   end Column_Count;
+
+   ------------
+   -- Data --
+   ------------
+   function Data (Self : Contact_List_Item; Column : Qt4.Q_Integer)
+      return Qt4.Variants.Q_Variant is
+      pragma Unreferenced (Self);
+      pragma Unreferenced (Column);
+
+   begin
+      return Qt4.Variants.Create;
+   end Data;
 
    ------------------
    --  Find_Child  --
@@ -104,6 +138,22 @@ package body UIM.Protocols.Contact_List_Items is
    begin
       return Self.Parent;
    end Parent;
+
+   -----------
+   -- Row --
+   -----------
+   function Row (Self : not null access Contact_List_Item)
+      return Qt4.Q_Integer is
+   begin
+      if Self.Parent /= null then
+         return
+           Qt4.Q_Integer
+            (Self.Parent.Children.Find_Index
+              (Contact_List_Item_Access (Self)));
+      else
+         return 0;
+      end if;
+   end Row;
 
    ----------------
    --  Set_Name  --

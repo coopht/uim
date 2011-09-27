@@ -39,16 +39,62 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Ada.Text_IO;
+
 with System.Address_To_Access_Conversions;
+with Qt4.Strings;
+
+with UIM.Protocols.Contact_List_Models.MOC;
+pragma Warnings (Off, UIM.Protocols.Contact_List_Models.MOC);
+--  Child package MOC must be included in the executable file.
 
 package body UIM.Protocols.Contact_List_Models is
 
-   use UIM.Protocols.Contact_List_Items;
    use Qt4;
 
    package Convert is
       new System.Address_To_Access_Conversions
            (UIM.Protocols.Contact_List_Items.Contact_List_Item);
+
+   ----------------
+   --  Add_Item  --
+   ----------------
+
+   procedure Add_Item
+    (Self   : not null access Contact_List_Model;
+     Parent :          access Contact_List_Item'Class := null;
+     Child  : not null access Contact_List_Item'Class) is
+
+      Item : Contact_List_Item_Access;
+      Idx : Qt4.Model_Indices.Q_Model_Index;
+
+   begin
+      if Parent /= null then
+         Idx := Self.Index (Parent.Row);
+      else
+         Idx := Qt4.Model_Indices.Create;
+      end if;
+
+      if Idx.Is_Valid then
+         Item
+           := Contact_List_Item_Access
+               (Convert.To_Pointer (Idx.Internal_Pointer));
+
+         if Item = null then
+            Item := Self.Root;
+         end if;
+
+      else
+         Item := Self.Root;
+      end if;
+
+      --  Inserting one row to the end;
+      Self.Begin_Insert_Rows (Idx, Self.Row_Count (Idx), Self.Row_Count (Idx));
+
+      Item.Append_Child (Contact_List_Item_Access (Child));
+
+      Self.End_Insert_Rows;
+   end Add_Item;
 
    --------------------
    --  Column_Count  --
@@ -58,7 +104,11 @@ package body UIM.Protocols.Contact_List_Models is
      Parent : Qt4.Model_Indices.Q_Model_Index)
        return Qt4.Q_Integer is
    begin
-      return 1;
+      if Parent.Is_Valid then
+         return Convert.To_Pointer (Parent.Internal_Pointer).Column_Count;
+      else
+         return Self.Root.Column_Count;
+      end if;
    end Column_Count;
 
    --------------
@@ -71,6 +121,9 @@ package body UIM.Protocols.Contact_List_Models is
 
    begin
       Qt4.Abstract_Item_Models.Directors.Constructors.Initialize (Self);
+
+      Self.Root := new UIM.Protocols.Contact_List_Items.Contact_List_Item (0);
+      Self.Root.Set_Name (Qt4.Strings.From_Utf_16 ("XXX"));
 
       return Self;
    end Create;
@@ -89,14 +142,8 @@ package body UIM.Protocols.Contact_List_Models is
 
    begin
       if Role = Qt4.Display_Role then
-         case Index.Column is
-            when 0 =>
-               return Qt4.Variants.Create (Item.Name);
-
-            when others =>
-               return Qt4.Variants.Create;
-
-         end case;
+         --  XXX it seems, that column 1 is set here
+         return Item.Data (Index.Column);
       end if;
 
       return Qt4.Variants.Create;
@@ -132,24 +179,31 @@ package body UIM.Protocols.Contact_List_Models is
    overriding function Index
     (Self   : not null access constant Contact_List_Model;
      Row    : Qt4.Q_Integer;
-     Column : Qt4.Q_Integer;
-     Parent : Qt4.Model_Indices.Q_Model_Index)
+     Column : Qt4.Q_Integer := 0;
+     Parent : Qt4.Model_Indices.Q_Model_Index := Qt4.Model_Indices.Create)
        return Qt4.Model_Indices.Q_Model_Index is
 
-      Parent_Item : constant Contact_List_Item_Access := Self.To_Item (Parent);
+      Parent_Item : Contact_List_Item_Access;
+      Child_Item  : Contact_List_Item_Access;
 
    begin
-      if Parent.Is_Valid and then Parent.Column /= 0 then
-         return Qt4.Model_Indices.Create;
+      if not Parent.Is_Valid then
+         Parent_Item := Self.Root;
 
       else
-         return
-           Self.Create_Index
-            (Row,
-             Column,
-             Convert.To_Address
-              (Convert.Object_Pointer
-                (Parent_Item.Child_At (Row + 1))));
+         Parent_Item := Contact_List_Item_Access
+                         (Convert.To_Pointer (Parent.Internal_Pointer));
+      end if;
+
+      Child_Item := Parent_Item.Child_At (Row);
+
+      if Child_Item /= null then
+         return Self.Create_Index (Row,
+                                   Column,
+                                   Convert.To_Address
+                                     (Convert.Object_Pointer (Child_Item)));
+      else
+         return Qt4.Model_Indices.Create;
       end if;
    end Index;
 
@@ -161,21 +215,26 @@ package body UIM.Protocols.Contact_List_Models is
      Child : Qt4.Model_Indices.Q_Model_Index)
                  return Qt4.Model_Indices.Q_Model_Index is
 
-      Child_Item : constant Contact_List_Item_Access := Self.To_Item (Child);
+      Child_Item  : Contact_List_Item_Access;
+      Parent_Item : Contact_List_Item_Access;
 
    begin
-      if Child_Item.Parent = null
-        or else Child_Item.Parent.Parent = null
-      then
+      if not Child.Is_Valid then
          return Qt4.Model_Indices.Create;
-
-      else
-         return
-           Self.Create_Index
-            ((Child_Item.Parent.Parent.Find_Child (Child_Item.Parent) - 1),
-             0,
-             Convert.To_Address (Convert.Object_Pointer (Child_Item.Parent)));
       end if;
+
+      Child_Item := Contact_List_Item_Access
+                     (Convert.To_Pointer (Child.Internal_Pointer));
+      Parent_Item := Child_Item.Parent;
+
+      if Parent_Item = Self.Root then
+         return Qt4.Model_Indices.Create;
+      end if;
+
+      return Self.Create_Index (Q_Integer (Parent_Item.Row),
+                                0,
+                                Convert.To_Address
+                                  (Convert.Object_Pointer (Parent_Item)));
    end Parent;
 
    -----------------
@@ -184,17 +243,23 @@ package body UIM.Protocols.Contact_List_Models is
    overriding function Row_Count
     (Self   : not null access constant Contact_List_Model;
      Parent : Qt4.Model_Indices.Q_Model_Index)
-       return Qt4.Q_Integer is
-
-      Parent_Item : constant Contact_List_Item_Access := Self.To_Item (Parent);
+        return Qt4.Q_Integer is
+      Parent_Item : Contact_List_Item_Access;
 
    begin
-      if Parent.Is_Valid and Parent.Column /= 0 then
+      if Parent.Column > 0 then
          return 0;
-
-      else
-         return Parent_Item.Children_Length;
       end if;
+
+      if not Parent.Is_Valid then
+         Parent_Item := Self.Root;
+      else
+         Parent_Item
+           := Contact_List_Item_Access
+               (Convert.To_Pointer (Parent.Internal_Pointer));
+      end if;
+
+      return Q_Integer (Parent_Item.Children_Length);
    end Row_Count;
 
    ---------------

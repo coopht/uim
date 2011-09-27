@@ -20,7 +20,7 @@
 --    notice, this list of conditions and the following disclaimer in the   --
 --    documentation and/or other materials provided with the distribution.  --
 --                                                                          --
---  * Neither the name of the Alexander Basov, IE nor the names of its        --
+--  * Neither the name of the Alexander Basov, IE nor the names of its      --
 --    contributors may be used to endorse or promote products derived from  --
 --    this software without specific prior written permission.              --
 --                                                                          --
@@ -42,12 +42,16 @@
 with Ada.Containers.Vectors;
 
 with Qt4.Strings;
+with Qt4.Variants;
 
 package UIM.Protocols.Contact_List_Items is
 
    type Contact_List_Item (Proto_Id : Natural) is tagged private;
 
    type Contact_List_Item_Access is access all Contact_List_Item'Class;
+
+   package Contact_List_Item_Vectors is
+      new Ada.Containers.Vectors (Natural, Contact_List_Item_Access);
 
    function Name (Self : Contact_List_Item) return Qt4.Strings.Q_String;
 
@@ -68,10 +72,19 @@ package UIM.Protocols.Contact_List_Items is
 
    function Parent (Self : Contact_List_Item) return Contact_List_Item_Access;
 
-private
+   function Children (Self : Contact_List_Item)
+      return Contact_List_Item_Vectors.Vector;
 
-   package Contact_List_Item_Vectors is
-      new Ada.Containers.Vectors (Natural, Contact_List_Item_Access);
+   function Column_Count (Self : Contact_List_Item)
+      return Qt4.Q_Integer;
+
+   function Data (Self : Contact_List_Item; Column : Qt4.Q_Integer)
+      return Qt4.Variants.Q_Variant;
+
+   function Row (Self : not null access Contact_List_Item)
+      return Qt4.Q_Integer;
+
+private
 
    type Contact_List_Item (Proto_Id : Natural) is tagged record
       Name     : Qt4.Strings.Q_String;
