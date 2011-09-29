@@ -83,7 +83,8 @@ package UIM.Protocols.Contact_Lists is
    --  Remove group from contact list
 
    function Get_Model (Self  : not null access Contact_List)
-     return not null access UIM.Protocols.Contact_List_Models.Contact_List_Model;
+      return
+        not null access UIM.Protocols.Contact_List_Models.Contact_List_Model;
 
 private
 

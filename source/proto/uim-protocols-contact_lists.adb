@@ -39,7 +39,6 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Wide_Text_IO;
 with Qt4.Model_Indices;
 
 with UIM.Protocols.Contact_List_Items;
@@ -71,7 +70,7 @@ package body UIM.Protocols.Contact_Lists is
       User  : not null access UIM.Protocols.Users.User;
       Group :          access UIM.Protocols.Groups.Group := null) is
    begin
-      Self.Model.Add_Item (Group, User);
+      Self.Model.Add_Item (User);
    end Add_User;
 
    ----------------
@@ -93,9 +92,6 @@ package body UIM.Protocols.Contact_Lists is
                   (Self.Model.To_Item (Index));
 
          begin
-            Ada.Wide_Wide_Text_IO.Put_Line ("!!!!!!!! : "
-                                              & Group.To_Ucs_4);
-
             if Group.Is_Empty then
                Item.Append_Child
                 (UIM.Protocols.Contact_List_Items.Contact_List_Item_Access
@@ -117,7 +113,9 @@ package body UIM.Protocols.Contact_Lists is
    -----------------
 
    function Get_Model (Self  : not null access Contact_List)
-      return not null access UIM.Protocols.Contact_List_Models.Contact_List_Model is
+      return
+        not null access UIM.Protocols.Contact_List_Models.Contact_List_Model
+   is
    begin
       return Self.Model;
    end Get_Model;
