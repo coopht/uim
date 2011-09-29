@@ -65,8 +65,8 @@ package UIM.Protocols.Contact_List_Models is
 
    procedure Add_Item
     (Self   : not null access Contact_List_Model;
-     Parent :          access Contact_List_Item'Class := null;
-     Child  : not null access Contact_List_Item'Class);
+     Child  : not null access Contact_List_Item'Class;
+     Parent :          access Contact_List_Item'Class := null);
 
 private
 
@@ -86,11 +86,6 @@ private
      Index : Qt4.Model_Indices.Q_Model_Index;
      Role  : Qt4.Item_Data_Role)
        return Qt4.Variants.Q_Variant;
-
-   overriding function Has_Children
-    (Self   : not null access constant Contact_List_Model;
-     Parent : Qt4.Model_Indices.Q_Model_Index)
-       return Boolean;
 
    overriding function Header_Data
     (Self        : not null access Contact_List_Model;

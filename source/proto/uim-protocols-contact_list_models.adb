@@ -39,8 +39,6 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Ada.Text_IO;
-
 with System.Address_To_Access_Conversions;
 with Qt4.Strings;
 
@@ -62,8 +60,8 @@ package body UIM.Protocols.Contact_List_Models is
 
    procedure Add_Item
     (Self   : not null access Contact_List_Model;
-     Parent :          access Contact_List_Item'Class := null;
-     Child  : not null access Contact_List_Item'Class) is
+     Child  : not null access Contact_List_Item'Class;
+     Parent :          access Contact_List_Item'Class := null) is
 
       Item : Contact_List_Item_Access;
       Idx : Qt4.Model_Indices.Q_Model_Index;
@@ -76,9 +74,7 @@ package body UIM.Protocols.Contact_List_Models is
       end if;
 
       if Idx.Is_Valid then
-         Item
-           := Contact_List_Item_Access
-               (Convert.To_Pointer (Idx.Internal_Pointer));
+         Item := Self.To_Item (Idx);
 
          if Item = null then
             Item := Self.Root;
@@ -105,7 +101,7 @@ package body UIM.Protocols.Contact_List_Models is
        return Qt4.Q_Integer is
    begin
       if Parent.Is_Valid then
-         return Convert.To_Pointer (Parent.Internal_Pointer).Column_Count;
+         return Self.To_Item (Parent).Column_Count;
       else
          return Self.Root.Column_Count;
       end if;
@@ -123,8 +119,7 @@ package body UIM.Protocols.Contact_List_Models is
       Qt4.Abstract_Item_Models.Directors.Constructors.Initialize (Self);
 
       Self.Root := new UIM.Protocols.Contact_List_Items.Contact_List_Item (0);
-      Self.Root.Set_Name (Qt4.Strings.From_Utf_16 ("XXX"));
-
+      Self.Root.Set_Name (Qt4.Strings.From_Utf_16 ("Root_Item"));
       return Self;
    end Create;
 
@@ -142,23 +137,11 @@ package body UIM.Protocols.Contact_List_Models is
 
    begin
       if Role = Qt4.Display_Role then
-         --  XXX it seems, that column 1 is set here
          return Item.Data (Index.Column);
       end if;
 
       return Qt4.Variants.Create;
    end Data;
-
-   --------------------
-   --  Has_Children  --
-   --------------------
-   overriding function Has_Children
-    (Self   : not null access constant Contact_List_Model;
-     Parent : Qt4.Model_Indices.Q_Model_Index)
-       return Boolean is
-   begin
-      return False;
-   end Has_Children;
 
    -------------------
    --  Header_Data  --
@@ -170,7 +153,7 @@ package body UIM.Protocols.Contact_List_Models is
      Role        : Qt4.Item_Data_Role)
        return Qt4.Variants.Q_Variant is
    begin
-      return Qt4.Variants.Create;
+      return Qt4.Variants.Create (Qt4.Strings.From_Utf_16 ("xxx"));
    end Header_Data;
 
    -------------
@@ -191,8 +174,7 @@ package body UIM.Protocols.Contact_List_Models is
          Parent_Item := Self.Root;
 
       else
-         Parent_Item := Contact_List_Item_Access
-                         (Convert.To_Pointer (Parent.Internal_Pointer));
+         Parent_Item := Self.To_Item (Parent);
       end if;
 
       Child_Item := Parent_Item.Child_At (Row);
@@ -223,9 +205,12 @@ package body UIM.Protocols.Contact_List_Models is
          return Qt4.Model_Indices.Create;
       end if;
 
-      Child_Item := Contact_List_Item_Access
-                     (Convert.To_Pointer (Child.Internal_Pointer));
+      Child_Item := Self.To_Item (Child);
       Parent_Item := Child_Item.Parent;
+
+      if Parent_Item = null then
+         return Qt4.Model_Indices.Create;
+      end if;
 
       if Parent_Item = Self.Root then
          return Qt4.Model_Indices.Create;
@@ -247,16 +232,14 @@ package body UIM.Protocols.Contact_List_Models is
       Parent_Item : Contact_List_Item_Access;
 
    begin
-      if Parent.Column > 0 then
-         return 0;
-      end if;
+      --  if Parent.Column > 0 then
+      --     return 0;
+      --  end if;
 
       if not Parent.Is_Valid then
          Parent_Item := Self.Root;
       else
-         Parent_Item
-           := Contact_List_Item_Access
-               (Convert.To_Pointer (Parent.Internal_Pointer));
+         Parent_Item := Self.To_Item (Parent);
       end if;
 
       return Q_Integer (Parent_Item.Children_Length);
