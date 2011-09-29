@@ -314,6 +314,10 @@ package body UIM.Protocols.UXMPP is
              (Qt4.Strings.From_Ucs_4
                (Data.Item_At (J).Get_JID.To_Wide_Wide_String));
 
+            User.Set_Name
+              (Qt4.Strings.From_Ucs_4
+                 (Data.Item_At (J).Get_JID.To_Wide_Wide_String));
+
             User.Set_Information (Info);
             Self.CL.Add_User (User);
          end;
