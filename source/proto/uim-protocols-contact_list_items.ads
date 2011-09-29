@@ -88,7 +88,7 @@ private
 
    type Contact_List_Item (Proto_Id : Natural) is tagged record
       Name     : Qt4.Strings.Q_String;
-      Parent   : Contact_List_Item_Access;
+      Parent   : Contact_List_Item_Access := null;
       Children : Contact_List_Item_Vectors.Vector;
    end record;
 

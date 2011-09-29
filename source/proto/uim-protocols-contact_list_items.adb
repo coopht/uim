@@ -106,7 +106,7 @@ package body UIM.Protocols.Contact_List_Items is
       pragma Unreferenced (Column);
 
    begin
-      return Qt4.Variants.Create;
+      return Qt4.Variants.Create (Self.Name);
    end Data;
 
    ------------------
