@@ -102,7 +102,6 @@ package body UIM.Protocols.Contact_List_Items is
    ------------
    function Data (Self : Contact_List_Item; Column : Qt4.Q_Integer)
       return Qt4.Variants.Q_Variant is
-      pragma Unreferenced (Self);
       pragma Unreferenced (Column);
 
    begin
