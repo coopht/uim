@@ -39,57 +39,80 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Qt_Ada.Generic_Variants;
-with League.Strings;
 
-package UIM.Protocols.Messages is
+package body UIM.Protocols.Messages is
 
-   type Message is tagged private;
+   --------------------
+   --  Get_Adressee  --
+   --------------------
+   function Get_Adressee (Self : Message)
+      return League.Strings.Universal_String is
+   begin
+      return Self.Adressee;
+   end Get_Adressee;
 
-   type Message_Access is access all Message;
+   ----------------
+   --  Get_Body  --
+   ----------------
+   function Get_Body (Self : Message)
+      return League.Strings.Universal_String is
+   begin
+      return Self.The_Body;
+   end Get_Body;
 
+   ------------------
+   --  Get_Sender  --
+   ------------------
+   function Get_Sender (Self : Message)
+      return League.Strings.Universal_String is
+   begin
+      return Self.Sender;
+   end Get_Sender;
+
+   -----------------
+   --  Get_Topic  --
+   -----------------
+   function Get_Topic (Self : Message)
+      return League.Strings.Universal_String is
+   begin
+      return Self.Topic;
+   end Get_Topic;
+
+   --------------------
+   --  Set_Adressee  --
+   --------------------
    procedure Set_Adressee (Self     : in out Message;
-                           Adressee : League.Strings.Universal_String);
-   --  Sets destination address of the message
+                           Adressee : League.Strings.Universal_String) is
+   begin
+      Self.Adressee := Adressee;
+   end Set_Adressee;
+
+   ----------------
+   --  Set_Body  --
+   ----------------
 
    procedure Set_Body (Self     : in out Message;
-                       The_Body : League.Strings.Universal_String);
-   --  Sets message body
+                       The_Body : League.Strings.Universal_String) is
+   begin
+      Self.The_Body := The_Body;
+   end Set_Body;
 
+   ------------------
+   --  Set_Sender  --
+   ------------------
    procedure Set_Sender (Self   : in out Message;
-                         Sender : League.Strings.Universal_String);
-   --  Sets sender of message
+                         Sender : League.Strings.Universal_String) is
+   begin
+      Self.Sender := Sender;
+   end Set_Sender;
 
+   -----------------
+   --  Set_Topic  --
+   -----------------
    procedure Set_Topic (Self  : in out Message;
-                        Topic : League.Strings.Universal_String);
-   --  Sets message topic
-
-   function Get_Adressee (Self : Message)
-      return League.Strings.Universal_String;
-   --  Returns destination address of the message
-
-   function Get_Body (Self : Message)
-      return League.Strings.Universal_String;
-   --  Returns message body
-
-   function Get_Sender (Self : Message)
-      return League.Strings.Universal_String;
-   --  Sets sender of message
-
-   function Get_Topic (Self : Message)
-      return League.Strings.Universal_String;
-   --  Returns message topic
-
-   package Message_Variant is
-      new Qt_Ada.Generic_Variants (Message_Access, "Message_Access");
-
-private
-
-   type Message is tagged record
-      Sender   : League.Strings.Universal_String;
-      Adressee : League.Strings.Universal_String;
-      The_Body : League.Strings.Universal_String;
-      Topic    : League.Strings.Universal_String;
-   end record;
+                        Topic : League.Strings.Universal_String) is
+   begin
+      Self.Topic := Topic;
+   end Set_Topic;
 
 end UIM.Protocols.Messages;
