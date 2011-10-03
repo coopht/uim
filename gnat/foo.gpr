@@ -41,7 +41,7 @@
 ------------------------------------------------------------------------------
 with "utils";
 with "proto";
-with "matreshka_league";
+with "league";
 with "uim_config";
 
 project FOO is

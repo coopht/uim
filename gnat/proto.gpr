@@ -40,7 +40,7 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with "qt_core";
-with "matreshka_league";
+with "league";
 with "uim_config";
 
 project Proto is

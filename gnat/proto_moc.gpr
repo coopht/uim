@@ -40,7 +40,7 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with "qt_core";
-with "matreshka_league";
+with "league";
 
 project Proto_Moc is
 
