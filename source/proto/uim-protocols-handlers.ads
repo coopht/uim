@@ -43,6 +43,8 @@ with Qt4.Objects;
 private with Qt4.Objects.Directors;
 with Qt4.Variants;
 
+with UIM.Protocols.Messages;
+
 package UIM.Protocols.Handlers is
 
    type Protocol_Handler is limited new Qt4.Objects.Q_Object with private;
@@ -50,6 +52,10 @@ package UIM.Protocols.Handlers is
    type Protocol_Handler_Access is access all Protocol_Handler;
 
    function Create return not null Protocol_Handler_Access;
+
+   procedure Message_Recieve_Signal
+     (Self : not null access Protocol_Handler;
+      Msg  : not null UIM.Protocols.Messages.Message_Access);
 
 private
 
