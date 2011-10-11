@@ -48,7 +48,6 @@ with Qt4.Widgets;
 private with Qt4.Widgets.Directors;
 
 with UIM.Protocols.Common;
---  with UIM.UI.Chat_Windows;
 
 package UIM.UI.Proto_Widgets is
 
@@ -76,17 +75,8 @@ private
          Proto        : --  Protocol, which is associated with current tab
            access UIM.Protocols.Common.Common_Protocol'Class;
          Contact_List : Qt4.Tree_Views.Q_Tree_View_Access;
-         --    Chat_Window  : UIM.UI.Chat_Windows.Chat_Window_Access := null;
          Menu_Button  : Qt4.Tool_Buttons.Q_Tool_Button_Access;
       end record;
-
-   procedure New_Msg_Slot (Self : not null access Proto_Widget;
-                           Msg  : Qt4.Variants.Q_Variant);
-   pragma Q_Slot (New_Msg_Slot, "newMsgSlot(QVariant)");
-
-   procedure Typing_Message_Slot (Self : not null access Proto_Widget;
-                                  User : Qt4.Variants.Q_Variant);
-   pragma Q_Slot (Typing_Message_Slot, "typingMessageSlot(QVariant)");
 
    procedure Status_Box_Activated (Self  : not null access Proto_Widget;
                                    Index : Qt4.Q_Integer);
