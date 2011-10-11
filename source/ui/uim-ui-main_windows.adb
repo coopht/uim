@@ -39,6 +39,7 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Ada.Text_IO;
 
 with Qt4.Actions.Constructors;
 with Qt4.Core_Applications;
@@ -51,15 +52,18 @@ with Qt4.Tab_Widgets.Constructors;
 
 with UIM.Protocols.Registry;
 
+with UIM.UI.Chat_Windows;
+with UIM.UI.Proto_Widgets;
+
 with UIM.UI.Main_Windows.MOC;
 pragma Warnings (Off, UIM.UI.Main_Windows.MOC);
 --  Child package MOC must be included in the executable file.
 
-with UIM.UI.Proto_Widgets;
-
 package body UIM.UI.Main_Windows is
 
    use Qt4;
+
+   use type UIM.UI.Chat_Windows.Chat_Window_Access;
 
    ----------------------
    --  Add_Group_Slot  --
@@ -127,12 +131,20 @@ package body UIM.UI.Main_Windows is
       Self.Central_Widget.Set_Tab_Position (Qt4.Tab_Widgets.East);
 
       for J in 0 .. UIM.Protocols.Registry.Size - 1 loop
-
          Tab_Id :=
            Self.Central_Widget.Add_Tab
            (UIM.UI.Proto_Widgets.Create (UIM.Protocols.Registry.Item (J)),
             Qt4.Strings.From_Ucs_4
              (UIM.Protocols.Registry.Item (J).Get_Name.To_Wide_Wide_String));
+
+         --  Connecting signals and slots to make GUI react to protocol events
+
+         Qt4.Objects.Connect
+           (UIM.Protocols.Registry.Item (J).Get_Protocol_Handler,
+            Qt4.Signal ("messageRecieveSignal(QVariant)"),
+            Self,
+            Qt4.Slot ("newMsgSlot(QVariant)"));
+
       end loop;
 
       Self.Set_Central_Widget (Self.Central_Widget);
@@ -310,6 +322,28 @@ package body UIM.UI.Main_Windows is
       null;
    end Load_Settings_Slot;
 
+   --------------------
+   --  New_Msg_Slot  --
+   --------------------
+   --  This slot implements chat window dialog behavior,
+   --  when new message arrives.
+   procedure  New_Msg_Slot (Self : not null access Main_Window;
+                            Msg  : Qt4.Variants.Q_Variant) is
+      --  M : constant not null UIM.Protocols.Messages.Message_Access
+      --    := UIM.Protocols.Messages.Message_Variant.To_Value (Msg);
+
+   begin
+      Ada.Text_IO.Put_Line ("New_Msg_Slot");
+
+      --  If chat window is not loaded we should load it from ui file
+      if Self.Chat_Window = null then
+         Self.Chat_Window := UIM.UI.Chat_Windows.Create;
+         Self.Chat_Window.Show;
+      end if;
+
+      --  Self.Chat_Window.Add_Dialog (M);
+   end New_Msg_Slot;
+
    --------------------------
    --  Save_Settings_Slot  --
    --------------------------
@@ -351,5 +385,21 @@ package body UIM.UI.Main_Windows is
       null;
       --  W.Show_User_Info_Slot;
    end Show_User_Info;
+
+   ---------------------------
+   --  Typing_Message_Slot  --
+   ---------------------------
+   procedure Typing_Message_Slot (Self : not null access Main_Window;
+                                  User : Qt4.Variants.Q_Variant) is
+      --  U : constant not null UIM.Protocols.Users.User_Access
+      --    := UIM.Protocols.Users.User_Variant.To_Value (User);
+      --  pragma Unreferenced (Self);
+
+   begin
+      --  Ada.Text_IO.Put_Line ("User : " &
+      --                          U.Get_Info.Get_Nick_Name &
+      --                          " is typing a message");
+      null;
+   end Typing_Message_Slot;
 
 end UIM.UI.Main_Windows;

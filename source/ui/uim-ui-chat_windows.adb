@@ -39,18 +39,62 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with "proto";
-with "qt_gui";
+with Qt4.Widgets.Constructors;
 
-project UIM_Main_Window_Moc is
+with UIM.UI.Chat_Windows.MOC;
+pragma Warnings (Off, UIM.UI.Chat_Windows.MOC);
+--  Child package MOC must be included in the executable file.
 
-   for Languages use ("Amoc");
-   for Source_Dirs use ("../source/ui/");
+package body UIM.UI.Chat_Windows is
 
-   for Object_Dir use "../source/ui/.amoc";
+   function Create return not null Chat_Window_Access is
+      Self : constant Chat_Window_Access := new Chat_Window;
 
-   for Source_Files use ("uim-ui-main_windows.ads",
-       		    	 "uim-ui-proto_widgets.ads",
-			 "uim-ui-chat_windows.ads");
+   begin
+      --  Initialize director
+      Qt4.Main_Windows.Directors.Constructors.Initialize (Self);
 
-end UIM_Main_Window_Moc;
+      Self.Central_Widget := Qt4.Widgets.Constructors.Create;
+
+      Self.Set_Central_Widget (Self.Central_Widget);
+
+      return Self;
+   end Create;
+
+   --  procedure Create_Actions (Self : not null access Main_Window'Class);
+
+   --  procedure Create_Main_Menu (Self : not null access Main_Window'Class);
+
+   --  Slots
+
+   --  Shows user info about selected user in Contact List
+   --  procedure Show_User_Info (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Show_User_Info);
+
+   --  procedure Show_Settings_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Show_Settings_Slot);
+
+   --  procedure Add_Group_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Add_Group_Slot);
+
+   --  procedure Add_User_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Add_User_Slot);
+
+   --  procedure Find_Contact_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Find_Contact_Slot);
+
+   --  procedure Save_Settings_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Save_Settings_Slot);
+
+   --  procedure Load_Settings_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Load_Settings_Slot);
+
+   --  procedure Join_Chat_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Join_Chat_Slot);
+
+   --  Events
+   --  procedure Close_Event
+   --    (Self  : not null access Main_Window;
+   --     Event : not null access Qt4.Close_Events.Q_Close_Event'Class);
+
+end UIM.UI.Chat_Windows;

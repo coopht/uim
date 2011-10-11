@@ -39,18 +39,74 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with "proto";
-with "qt_gui";
+with Qt4.Actions;
+with Qt4.Main_Windows;
+with Qt4.Menus;
+with Qt4.Widgets;
+private with Qt4.Main_Windows.Directors;
+with Qt4.Tab_Widgets;
 
-project UIM_Main_Window_Moc is
+package UIM.UI.Chat_Windows is
 
-   for Languages use ("Amoc");
-   for Source_Dirs use ("../source/ui/");
+   type Chat_Window is limited new Qt4.Main_Windows.Q_Main_Window with private;
 
-   for Object_Dir use "../source/ui/.amoc";
+   type Chat_Window_Access is access all Chat_Window'Class;
 
-   for Source_Files use ("uim-ui-main_windows.ads",
-       		    	 "uim-ui-proto_widgets.ads",
-			 "uim-ui-chat_windows.ads");
+   function Create return not null Chat_Window_Access;
 
-end UIM_Main_Window_Moc;
+private
+
+   type Chat_Window is
+      limited new Qt4.Main_Windows.Directors.Q_Main_Window_Director with record
+        Central_Widget : Qt4.Widgets.Q_Widget_Access;
+        Tabs           : Qt4.Tab_Widgets.Q_Tab_Widget_Access;
+        Main_Menu      : Qt4.Menus.Q_Menu_Access;
+
+        --  Menu Actions
+        --  Add_User_Act     : Qt4.Actions.Q_Action_Access;
+        --  Add_Group_Act    : Qt4.Actions.Q_Action_Access;
+        --  Find_Contact_Act : Qt4.Actions.Q_Action_Access;
+        --  Hide_Window_Act  : Qt4.Actions.Q_Action_Access;
+        Quit_Act         : Qt4.Actions.Q_Action_Access;
+        --  Settings_Act     : Qt4.Actions.Q_Action_Access;
+        User_Info_Act    : Qt4.Actions.Q_Action_Access;
+        --  Join_Chat_Act    : Qt4.Actions.Q_Action_Access;
+   end record;
+
+   --  procedure Create_Actions (Self : not null access Main_Window'Class);
+
+   --  procedure Create_Main_Menu (Self : not null access Main_Window'Class);
+
+   --  Slots
+
+   --  Shows user info about selected user in Contact List
+   --  procedure Show_User_Info (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Show_User_Info);
+
+   --  procedure Show_Settings_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Show_Settings_Slot);
+
+   --  procedure Add_Group_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Add_Group_Slot);
+
+   --  procedure Add_User_Slot (Self : not null access Main_Window);
+   --  pragma Q_Slot (Add_User_Slot);
+
+   --  procedure Find_Contact_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Find_Contact_Slot);
+
+   --  procedure Save_Settings_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Save_Settings_Slot);
+
+   --  procedure Load_Settings_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Load_Settings_Slot);
+
+   --  procedure Join_Chat_Slot (Self  : not null access Main_Window);
+   --  pragma Q_Slot (Join_Chat_Slot);
+
+   --  Events
+   --  procedure Close_Event
+   --    (Self  : not null access Main_Window;
+   --     Event : not null access Qt4.Close_Events.Q_Close_Event'Class);
+
+end UIM.UI.Chat_Windows;

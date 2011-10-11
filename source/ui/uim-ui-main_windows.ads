@@ -45,6 +45,9 @@ with Qt4.Main_Windows;
 with Qt4.Menus;
 private with Qt4.Main_Windows.Directors;
 with Qt4.Tab_Widgets;
+with Qt4.Variants;
+
+with UIM.UI.Chat_Windows;
 
 package UIM.UI.Main_Windows is
 
@@ -70,13 +73,16 @@ private
         Settings_Act     : Qt4.Actions.Q_Action_Access;
         User_Info_Act    : Qt4.Actions.Q_Action_Access;
         Join_Chat_Act    : Qt4.Actions.Q_Action_Access;
+
+        --  Different windows, independent from any proto
+        Chat_Window      : UIM.UI.Chat_Windows.Chat_Window_Access := null;
    end record;
 
    procedure Create_Actions (Self : not null access Main_Window'Class);
 
    procedure Create_Main_Menu (Self : not null access Main_Window'Class);
 
-      --  Slots
+   --  Slots
 
    --  Shows user info about selected user in Contact List
    procedure Show_User_Info (Self  : not null access Main_Window);
@@ -102,6 +108,14 @@ private
 
    procedure Join_Chat_Slot (Self  : not null access Main_Window);
    pragma Q_Slot (Join_Chat_Slot);
+
+   procedure New_Msg_Slot (Self : not null access Main_Window;
+                           Msg  : Qt4.Variants.Q_Variant);
+   pragma Q_Slot (New_Msg_Slot, "newMsgSlot(QVariant)");
+
+   procedure Typing_Message_Slot (Self : not null access Main_Window;
+                                  User : Qt4.Variants.Q_Variant);
+   pragma Q_Slot (Typing_Message_Slot, "typingMessageSlot(QVariant)");
 
    --  Events
    procedure Close_Event

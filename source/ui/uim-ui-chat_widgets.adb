@@ -39,18 +39,42 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with "proto";
-with "qt_gui";
+with Qt4.H_Box_Layouts.Constructors;
+with Qt4.V_Box_Layouts.Constructors;
+with Qt4.Widgets.Directors.Constructors;
 
-project UIM_Main_Window_Moc is
+package UIM.UI.Chat_Widgets is
 
-   for Languages use ("Amoc");
-   for Source_Dirs use ("../source/ui/");
+   --------------
+   --  Create  --
+   --------------
+   function Create return not null access Chat_Widget'Class
+   is
+      Self : constant Chat_Widget_Access := new Chat_Widget;
 
-   for Object_Dir use "../source/ui/.amoc";
+      HLayout : constant not null access Qt4.H_Box_Layouts.Q_H_BOX_Layout'Class
+        := Qt4.H_Box_Layouts.Constructors.Create;
 
-   for Source_Files use ("uim-ui-main_windows.ads",
-       		    	 "uim-ui-proto_widgets.ads",
-			 "uim-ui-chat_windows.ads");
+      VLayout : constant not null access Qt4.V_BOX_Layouts.Q_V_BOX_Layout'Class
+        := Qt4.V_BOX_Layouts.Constructors.Create;
 
-end UIM_Main_Window_Moc;
+   begin
+      Qt4.Widgets.Directors.Constructors.Initialize (Self);
+
+      Self.History_View := Qt4.Text_Edits.Constructors.Create;
+      Self.Msg_Edit := Qt4.Text_Edits.Constructors.Create;
+      VLayout.Add_Widget (Self.History_View);
+      VLayout.Add_Widget (Self.Msg_Edit);
+
+      Self.Members := Qt4.List_Widgets.Constructors.Create;
+      --  Self.Members.Set_Visible (False);
+      HLayout.Add_Layout (VLayout);
+      HLayout.Add_Widget (Qt4.Splitters.Constructors.Create);
+      HLayout.Add_Widget (Self.Members);
+
+      Self.Set_Layout (HLayout);
+      return Self;
+   end Create;
+
+
+end UIM.UI.Chat_Widgets;

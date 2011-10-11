@@ -39,18 +39,26 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with "proto";
-with "qt_gui";
 
-project UIM_Main_Window_Moc is
+package UIM.UI.Chat_Widgets is
 
-   for Languages use ("Amoc");
-   for Source_Dirs use ("../source/ui/");
+   type Chat_Widget is limited new Qt4.Widgets.Q_Widget with private;
 
-   for Object_Dir use "../source/ui/.amoc";
+   type Chat_Widget_Access is access all Chat_Widget;
 
-   for Source_Files use ("uim-ui-main_windows.ads",
-       		    	 "uim-ui-proto_widgets.ads",
-			 "uim-ui-chat_windows.ads");
+   function Create return not null access Chat_Widget'Class;
 
-end UIM_Main_Window_Moc;
+private
+
+   package Participants_Vectors is
+      new Ada.Containers.Vectors (Natural, UIM.Protocols.Users.User_Access);
+
+   type Chat_Widget is limited new Qt4.Chat_Widgets.Directors.Q_Widget_Director
+     with record
+     History_Widget : Qt4.Text_Edits.Q_Text_Edit_Access;
+     Message_Edit   : Qt4.Text_Edits.Q_Text_Edit_Access;
+     Members        : Qt4.List_Widgets.Q_List_Widget_Access;
+     Participants   : Participants_Vectors.Vector;
+   end record;
+
+end UIM.UI.Chat_Widgets;
