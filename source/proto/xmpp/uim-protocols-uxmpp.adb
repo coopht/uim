@@ -42,6 +42,7 @@
 with Qt4.Strings;
 
 with UIM.Protocols.Informations;
+with UIM.Protocols.Messages;
 with UIM.Protocols.Users;
 
 with XMPP.Logger;
@@ -196,8 +197,8 @@ package body UIM.Protocols.UXMPP is
      (Self : in out UIM_XMPP;
       Msg  : XMPP.Messages.XMPP_Message'Class) is
 
-      --  Target_Msg : constant not null UIM.Protocols.Messages.Message_Access
-      --    := new UIM.Protocols.Messages.Message;
+      Target_Msg : constant not null UIM.Protocols.Messages.Message_Access
+        := new UIM.Protocols.Messages.Message;
 
       --  --  XXX: User, User_Info shoud not to be created here
 
@@ -249,7 +250,7 @@ package body UIM.Protocols.UXMPP is
       --     Target_Msg.Type_Of_Msg := UIM.Protocols.Messages.Conference;
       --  end if;
 
-      --  Self.Glue.Message_Recieve_Signal (Target_Msg);
+      Self.Handler.Message_Recieve_Signal (Target_Msg);
 
    end Message;
 
