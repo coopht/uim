@@ -130,12 +130,6 @@ package body UIM.UI.Proto_Widgets is
 
       Self.Set_Layout (V_Layout);
 
-      Qt4.Objects.Connect
-       (Self.Proto.Get_Protocol_Handler,
-        Qt4.Signal ("messageRecieveSignal(QVariant)"),
-        Self,
-        Qt4.Slot ("newMsgSlot(QVariant)"));
-
       --  Qt4.Objects.Connect
       --   (Self.Proto.Get_Protocol_Handler,
       --    Qt4.Signal ("typingNotificationSignal(QVariant)"),
@@ -168,29 +162,6 @@ package body UIM.UI.Proto_Widgets is
 
       return Self;
    end Create;
-
-   --------------------
-   --  New_Msg_Slot  --
-   --------------------
-   --  This slot implements chat window dialog behavior,
-   --  when new message arrives.
-   procedure  New_Msg_Slot (Self : not null access Proto_Widget;
-                            Msg  : Qt4.Variants.Q_Variant) is
-      --  M : constant not null UIM.Protocols.Messages.Message_Access
-      --    := UIM.Protocols.Messages.Message_Variant.To_Value (Msg);
-
-   begin
-      null;
-      --  Ada.Text_IO.Put_Line ("Slot From :" &
-      --                          M.Get_From.Get_Info.Get_Nick_Name.To_Utf_8);
-      --  Ada.Text_IO.Put_Line ("Slot Text :" & M.all.Get_Plain_Text.To_Utf_8);
-      --  If chat window is not loaded we should load it from ui file
-      --  if Self.Chat_Window = null then
-      --     Self.Chat_Window := UIM.UI.Chat_Windows.Create (Self);
-      --  end if;
-
-      --  Self.Chat_Window.Add_Dialog (M.Get_From, M);
-   end New_Msg_Slot;
 
    ----------------------------
    --  Status_Box_Activated  --
@@ -233,22 +204,6 @@ package body UIM.UI.Proto_Widgets is
       --     end if;
       --  end if;
    end CL_Item_Activated;
-
-   ---------------------------
-   --  Typing_Message_Slot  --
-   ---------------------------
-   procedure Typing_Message_Slot (Self : not null access Proto_Widget;
-                                  User : Qt4.Variants.Q_Variant) is
-      --  U : constant not null UIM.Protocols.Users.User_Access
-      --    := UIM.Protocols.Users.User_Variant.To_Value (User);
-      --  pragma Unreferenced (Self);
-
-   begin
-      --  Ada.Text_IO.Put_Line ("User : " &
-      --                          U.Get_Info.Get_Nick_Name &
-      --                          " is typing a message");
-      null;
-   end Typing_Message_Slot;
 
    ----------------------
    --  Show_User_Info  --
