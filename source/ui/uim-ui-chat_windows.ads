@@ -51,6 +51,8 @@ with UIM.Protocols.Users;
 
 with UIM.UI.Chat_Widgets;
 
+with UIM.Utils.Logger;
+
 package UIM.UI.Chat_Windows is
 
    type Chat_Window is limited new Qt4.Main_Windows.Q_Main_Window with private;
@@ -74,6 +76,7 @@ private
         Main_Menu      : Qt4.Menus.Q_Menu_Access;
         Quit_Act       : Qt4.Actions.Q_Action_Access;
         User_Info_Act  : Qt4.Actions.Q_Action_Access;
+        Logger         : Utils.Logger.UIM_Logger;
    end record;
 
 end UIM.UI.Chat_Windows;

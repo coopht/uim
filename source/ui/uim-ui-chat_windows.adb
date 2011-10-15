@@ -64,8 +64,14 @@ package body UIM.UI.Chat_Windows is
 
       Tab_Id : Qt4.Q_Integer;
       pragma Warnings (Off, Tab_Id);
+
    begin
-      null;
+      if Tab = null then
+         Tab := UIM.UI.Chat_Widgets.Create (Message.Get_Sender);
+
+         Tab_Id := Self.Central_Widget.Add_Tab (Tab, Message.Get_Sender.Name);
+
+      end if;
    end Add_Dialog;
 
    --------------
@@ -103,7 +109,6 @@ package body UIM.UI.Chat_Windows is
               (Self.Central_Widget.Widget (J).all)'Access;
 
             if Tab.Get_User.Information.Id = User.Information.Id then
-               --  Self.D.Log ("Id matched");
 
                if Tab.Get_User.Information.Id = UID then
                   --  Self.D.Log ("User found : " & UID.To_Ucs_4);

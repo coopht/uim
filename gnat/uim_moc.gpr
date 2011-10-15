@@ -41,6 +41,7 @@
 ------------------------------------------------------------------------------
 with "proto";
 with "qt_gui";
+with "utils";
 
 project UIM_Main_Window_Moc is
 
