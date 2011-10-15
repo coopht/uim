@@ -40,15 +40,23 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with Qt4.H_Box_Layouts.Constructors;
+with Qt4.List_Widgets.Constructors;
+with Qt4.Splitters.Constructors;
+with Qt4.Text_Edits.Constructors;
 with Qt4.V_Box_Layouts.Constructors;
-with Qt4.Widgets.Directors.Constructors;
+with Qt4.Widgets.Directors;
 
-package UIM.UI.Chat_Widgets is
+with UIM.UI.Chat_Widgets.MOC;
+pragma Warnings (Off, UIM.UI.Chat_Widgets.MOC);
+--  Child package MOC must be included in the executable file.
+
+package body UIM.UI.Chat_Widgets is
 
    --------------
    --  Create  --
    --------------
-   function Create return not null access Chat_Widget'Class
+   function Create (User : UIM.Protocols.Users.User_Access)
+      return not null access Chat_Widget'Class
    is
       Self : constant Chat_Widget_Access := new Chat_Widget;
 
@@ -61,10 +69,10 @@ package UIM.UI.Chat_Widgets is
    begin
       Qt4.Widgets.Directors.Constructors.Initialize (Self);
 
-      Self.History_View := Qt4.Text_Edits.Constructors.Create;
-      Self.Msg_Edit := Qt4.Text_Edits.Constructors.Create;
-      VLayout.Add_Widget (Self.History_View);
-      VLayout.Add_Widget (Self.Msg_Edit);
+      Self.History_Widget := Qt4.Text_Edits.Constructors.Create;
+      Self.Message_Edit := Qt4.Text_Edits.Constructors.Create;
+      VLayout.Add_Widget (Self.History_Widget);
+      VLayout.Add_Widget (Self.Message_Edit);
 
       Self.Members := Qt4.List_Widgets.Constructors.Create;
       --  Self.Members.Set_Visible (False);
@@ -76,5 +84,14 @@ package UIM.UI.Chat_Widgets is
       return Self;
    end Create;
 
+   ----------------
+   --  Get_User  --
+   ----------------
+
+   function Get_User (Self : not null access Chat_Widget)
+      return UIM.Protocols.Users.User_Access is
+   begin
+      return Self.User;
+   end Get_User;
 
 end UIM.UI.Chat_Widgets;

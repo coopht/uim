@@ -39,6 +39,14 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Ada.Containers.Vectors;
+
+with Qt4.List_Widgets;
+with Qt4.Text_Edits;
+with Qt4.Widgets;
+private with Qt4.Widgets.Directors;
+
+with UIM.Protocols.Users;
 
 package UIM.UI.Chat_Widgets is
 
@@ -46,19 +54,27 @@ package UIM.UI.Chat_Widgets is
 
    type Chat_Widget_Access is access all Chat_Widget;
 
-   function Create return not null access Chat_Widget'Class;
+   function Create (User : UIM.Protocols.Users.User_Access)
+      return not null access Chat_Widget'Class;
+
+   function Get_User (Self : not null access Chat_Widget)
+      return UIM.Protocols.Users.User_Access;
 
 private
 
    package Participants_Vectors is
-      new Ada.Containers.Vectors (Natural, UIM.Protocols.Users.User_Access);
+      new Ada.Containers.Vectors (Natural,
+                                  UIM.Protocols.Users.User_Access,
+                                  UIM.Protocols.Users."=");
 
-   type Chat_Widget is limited new Qt4.Chat_Widgets.Directors.Q_Widget_Director
+   type Chat_Widget is limited new Qt4.Widgets.Directors.Q_Widget_Director
      with record
      History_Widget : Qt4.Text_Edits.Q_Text_Edit_Access;
      Message_Edit   : Qt4.Text_Edits.Q_Text_Edit_Access;
      Members        : Qt4.List_Widgets.Q_List_Widget_Access;
      Participants   : Participants_Vectors.Vector;
+     --  Owner of current dialog
+     User           : UIM.Protocols.Users.User_Access := null;
    end record;
 
 end UIM.UI.Chat_Widgets;

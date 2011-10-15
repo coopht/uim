@@ -51,6 +51,7 @@ project UIM_Main_Window_Moc is
 
    for Source_Files use ("uim-ui-main_windows.ads",
        		    	 "uim-ui-proto_widgets.ads",
-			 "uim-ui-chat_windows.ads");
+			 "uim-ui-chat_windows.ads",
+			 "uim-ui-chat_widgets.ads");
 
 end UIM_Main_Window_Moc;

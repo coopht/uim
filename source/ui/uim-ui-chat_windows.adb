@@ -39,13 +39,38 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
-with Qt4.Widgets.Constructors;
+with Qt4.Strings;
+with Qt4.Tab_Widgets.Constructors;
+
+with UIM.UI.Chat_Widgets;
 
 with UIM.UI.Chat_Windows.MOC;
 pragma Warnings (Off, UIM.UI.Chat_Windows.MOC);
 --  Child package MOC must be included in the executable file.
 
 package body UIM.UI.Chat_Windows is
+
+   use type Qt4.Q_Integer;
+   use type Qt4.Strings.Q_String;
+
+   ------------------
+   --  Add_Dialog  --
+   ------------------
+   procedure Add_Dialog (Self    : not null access Chat_Window;
+                         Message : UIM.Protocols.Messages.Message_Access) is
+
+      Tab : access UIM.UI.Chat_Widgets.Chat_Widget'Class
+        := Self.Find_Tab_By_User (Message.Get_Sender);
+
+      Tab_Id : Qt4.Q_Integer;
+      pragma Warnings (Off, Tab_Id);
+   begin
+      null;
+   end Add_Dialog;
+
+   --------------
+   --  Create  --
+   --------------
 
    function Create return not null Chat_Window_Access is
       Self : constant Chat_Window_Access := new Chat_Window;
@@ -54,47 +79,46 @@ package body UIM.UI.Chat_Windows is
       --  Initialize director
       Qt4.Main_Windows.Directors.Constructors.Initialize (Self);
 
-      Self.Central_Widget := Qt4.Widgets.Constructors.Create;
+      Self.Central_Widget := Qt4.Tab_Widgets.Constructors.Create;
 
       Self.Set_Central_Widget (Self.Central_Widget);
 
       return Self;
    end Create;
 
-   --  procedure Create_Actions (Self : not null access Main_Window'Class);
+   ---------------
+   --  Get_Tab  --
+   ---------------
+   function Find_Tab_By_User (Self : not null access Chat_Window;
+                              User : UIM.Protocols.Users.User_Access)
+      return access UIM.UI.Chat_Widgets.Chat_Widget'Class is
 
-   --  procedure Create_Main_Menu (Self : not null access Main_Window'Class);
+      Tab : access UIM.UI.Chat_Widgets.Chat_Widget'Class;
+      UID : constant Qt4.Strings.Q_String := User.Information.Id;
 
-   --  Slots
+   begin
+      if Self.Central_Widget.Count > 0 then
+         for J in 0 .. Self.Central_Widget.Count - 1 loop
+            Tab := UIM.UI.Chat_Widgets.Chat_Widget'Class
+              (Self.Central_Widget.Widget (J).all)'Access;
 
-   --  Shows user info about selected user in Contact List
-   --  procedure Show_User_Info (Self  : not null access Main_Window);
-   --  pragma Q_Slot (Show_User_Info);
+            if Tab.Get_User.Information.Id = User.Information.Id then
+               --  Self.D.Log ("Id matched");
 
-   --  procedure Show_Settings_Slot (Self : not null access Main_Window);
-   --  pragma Q_Slot (Show_Settings_Slot);
+               if Tab.Get_User.Information.Id = UID then
+                  --  Self.D.Log ("User found : " & UID.To_Ucs_4);
+                  --  Self.D.Log ("ID : " & UID.To_Ucs_4);
 
-   --  procedure Add_Group_Slot (Self : not null access Main_Window);
-   --  pragma Q_Slot (Add_Group_Slot);
+                  --  If user found we adding message to chat window
+                  --  and activate tab, behaviour should be configurable.
+                  return UIM.UI.Chat_Widgets.Chat_Widget'Class
+                    (Self.Central_Widget.Widget (J).all)'Access;
+               end if;
+            end if;
+         end loop;
+      end if;
 
-   --  procedure Add_User_Slot (Self : not null access Main_Window);
-   --  pragma Q_Slot (Add_User_Slot);
-
-   --  procedure Find_Contact_Slot (Self  : not null access Main_Window);
-   --  pragma Q_Slot (Find_Contact_Slot);
-
-   --  procedure Save_Settings_Slot (Self  : not null access Main_Window);
-   --  pragma Q_Slot (Save_Settings_Slot);
-
-   --  procedure Load_Settings_Slot (Self  : not null access Main_Window);
-   --  pragma Q_Slot (Load_Settings_Slot);
-
-   --  procedure Join_Chat_Slot (Self  : not null access Main_Window);
-   --  pragma Q_Slot (Join_Chat_Slot);
-
-   --  Events
-   --  procedure Close_Event
-   --    (Self  : not null access Main_Window;
-   --     Event : not null access Qt4.Close_Events.Q_Close_Event'Class);
+      return null;
+   end Find_Tab_By_User;
 
 end UIM.UI.Chat_Windows;
