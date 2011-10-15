@@ -42,6 +42,8 @@
 with Qt_Ada.Generic_Variants;
 with League.Strings;
 
+with UIM.Protocols.Users;
+
 package UIM.Protocols.Messages is
 
    type Message is tagged private;
@@ -49,7 +51,7 @@ package UIM.Protocols.Messages is
    type Message_Access is access all Message;
 
    procedure Set_Adressee (Self     : in out Message;
-                           Adressee : League.Strings.Universal_String);
+                           Adressee : UIM.Protocols.Users.User_Access);
    --  Sets destination address of the message
 
    procedure Set_Body (Self     : in out Message;
@@ -57,7 +59,7 @@ package UIM.Protocols.Messages is
    --  Sets message body
 
    procedure Set_Sender (Self   : in out Message;
-                         Sender : League.Strings.Universal_String);
+                         Sender : UIM.Protocols.Users.User_Access);
    --  Sets sender of message
 
    procedure Set_Topic (Self  : in out Message;
@@ -65,7 +67,7 @@ package UIM.Protocols.Messages is
    --  Sets message topic
 
    function Get_Adressee (Self : Message)
-      return League.Strings.Universal_String;
+      return UIM.Protocols.Users.User_Access;
    --  Returns destination address of the message
 
    function Get_Body (Self : Message)
@@ -73,7 +75,7 @@ package UIM.Protocols.Messages is
    --  Returns message body
 
    function Get_Sender (Self : Message)
-      return League.Strings.Universal_String;
+      return UIM.Protocols.Users.User_Access;
    --  Sets sender of message
 
    function Get_Topic (Self : Message)
@@ -86,8 +88,8 @@ package UIM.Protocols.Messages is
 private
 
    type Message is tagged record
-      Sender   : League.Strings.Universal_String;
-      Adressee : League.Strings.Universal_String;
+      Sender   : UIM.Protocols.Users.User_Access;
+      Adressee : UIM.Protocols.Users.User_Access;
       The_Body : League.Strings.Universal_String;
       Topic    : League.Strings.Universal_String;
    end record;

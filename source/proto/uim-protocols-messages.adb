@@ -46,7 +46,7 @@ package body UIM.Protocols.Messages is
    --  Get_Adressee  --
    --------------------
    function Get_Adressee (Self : Message)
-      return League.Strings.Universal_String is
+      return UIM.Protocols.Users.User_Access is
    begin
       return Self.Adressee;
    end Get_Adressee;
@@ -64,7 +64,7 @@ package body UIM.Protocols.Messages is
    --  Get_Sender  --
    ------------------
    function Get_Sender (Self : Message)
-      return League.Strings.Universal_String is
+      return UIM.Protocols.Users.User_Access is
    begin
       return Self.Sender;
    end Get_Sender;
@@ -82,7 +82,7 @@ package body UIM.Protocols.Messages is
    --  Set_Adressee  --
    --------------------
    procedure Set_Adressee (Self     : in out Message;
-                           Adressee : League.Strings.Universal_String) is
+                           Adressee : UIM.Protocols.Users.User_Access) is
    begin
       Self.Adressee := Adressee;
    end Set_Adressee;
@@ -101,7 +101,7 @@ package body UIM.Protocols.Messages is
    --  Set_Sender  --
    ------------------
    procedure Set_Sender (Self   : in out Message;
-                         Sender : League.Strings.Universal_String) is
+                         Sender : UIM.Protocols.Users.User_Access) is
    begin
       Self.Sender := Sender;
    end Set_Sender;
