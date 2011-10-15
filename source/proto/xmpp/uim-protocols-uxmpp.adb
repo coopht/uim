@@ -50,6 +50,7 @@ package body UIM.Protocols.UXMPP is
 
    use type League.Strings.Universal_String;
    use type XMPP.Messages.Message_Type;
+   use type UIM.Protocols.Users.User_Access;
 
    function "+" (Item : Wide_Wide_String)
      return League.Strings.Universal_String
@@ -200,10 +201,10 @@ package body UIM.Protocols.UXMPP is
       Target_Msg : constant not null UIM.Protocols.Messages.Message_Access
         := new UIM.Protocols.Messages.Message;
 
-      --  --  XXX: User, User_Info shoud not to be created here
-
-      --  User       : constant UIM.Protocols.Users.User_Access
-      --    := new UIM.Protocols.Users.User (Self.Proto_Id);
+      User       : constant UIM.Protocols.Users.User_Access
+        := Self.CL.Find_User_By_Id
+            (Qt4.Strings.From_Ucs_4
+               (To_Canonical_JID (Msg.Get_From.To_Wide_Wide_String)));
 
       --  User_Info  : constant not null
       --  UIM.Protocols.User_Infos.User_Info_Access
@@ -213,8 +214,9 @@ package body UIM.Protocols.UXMPP is
 
    begin
       Self.Logger.Log ("Message received from :"
-                    & Msg.Get_From.To_Wide_Wide_String);
+                         & Msg.Get_From.To_Wide_Wide_String);
 
+      Target_Msg.Set_Sender (User);
       --  Target_Msg.Set_Plain_Text (Msg.Get_Body.To_Wide_Wide_String);
 
       --  User_Info.Set_ID
