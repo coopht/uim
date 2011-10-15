@@ -77,11 +77,17 @@ package UIM.Protocols.Contact_Lists is
       Group : not null access UIM.Protocols.Groups.Group);
    --  Add new group to contact list
 
+   function Find_User_By_Id (Self : not null access Contact_List;
+                             Id   : Qt4.Strings.Q_String)
+      return UIM.Protocols.Users.User_Access;
+   --  Find user by user id in contact list
+
    procedure Remove_Group
      (Self  : not null access Contact_List;
       Group : not null access UIM.Protocols.Groups.Group);
    --  Remove group from contact list
 
+   --  End of public API
    function Get_Model (Self  : not null access Contact_List)
       return
         not null access UIM.Protocols.Contact_List_Models.Contact_List_Model;

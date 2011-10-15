@@ -108,6 +108,27 @@ package body UIM.Protocols.Contact_Lists is
       end loop;
    end Add_User;
 
+   -----------------------
+   --  Find_User_By_Id  --
+   -----------------------
+
+   function Find_User_By_Id (Self : not null access Contact_List;
+                             Id   : Qt4.Strings.Q_String)
+      return UIM.Protocols.Users.User_Access is
+
+      Root : UIM.Protocols.Contact_List_Items.Contact_List_Item_Access
+        := Self.Model.Get_Root_Item;
+
+   begin
+      for J in 0 .. Root.Children_Length - 1 loop
+         if Root.Child_At (J).Name = Id then
+            return UIM.Protocols.Users.User_Access (Root.Child_At (J));
+         end if;
+      end loop;
+
+      return null;
+   end Find_User_By_Id;
+
    -----------------
    --  Get_Model  --
    -----------------
