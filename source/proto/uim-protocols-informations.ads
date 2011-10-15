@@ -123,7 +123,7 @@ private
       record
       --  ID - icq number of jabber e-mail address.
       Id         : Qt4.Strings.Q_String;
-      Nickname  : Qt4.Strings.Q_String;
+      Nickname   : Qt4.Strings.Q_String;
       Name       : Qt4.Strings.Q_String;
       Surname    : Qt4.Strings.Q_String;
       Patronymic : Qt4.Strings.Q_String;
