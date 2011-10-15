@@ -50,6 +50,7 @@ with Qt4.Objects;
 with Qt4.Strings;
 with Qt4.Tab_Widgets.Constructors;
 
+with UIM.Protocols.Messages;
 with UIM.Protocols.Registry;
 
 with UIM.UI.Chat_Windows;
@@ -329,9 +330,6 @@ package body UIM.UI.Main_Windows is
    --  when new message arrives.
    procedure  New_Msg_Slot (Self : not null access Main_Window;
                             Msg  : Qt4.Variants.Q_Variant) is
-      --  M : constant not null UIM.Protocols.Messages.Message_Access
-      --    := UIM.Protocols.Messages.Message_Variant.To_Value (Msg);
-
    begin
       Ada.Text_IO.Put_Line ("New_Msg_Slot");
 
@@ -341,7 +339,8 @@ package body UIM.UI.Main_Windows is
          Self.Chat_Window.Show;
       end if;
 
-      --  Self.Chat_Window.Add_Dialog (M);
+      Self.Chat_Window.Add_Dialog
+        (UIM.Protocols.Messages.Message_Variant.To_Value (Msg));
    end New_Msg_Slot;
 
    --------------------------
