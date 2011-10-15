@@ -68,6 +68,10 @@ package UIM.Protocols.Contact_List_Models is
      Child  : not null access Contact_List_Item'Class;
      Parent :          access Contact_List_Item'Class := null);
 
+   function Get_Root_Item (Self : not null access Contact_List_Model)
+      return
+        not null UIM.Protocols.Contact_List_Items.Contact_List_Item_Access;
+
 private
 
    type Contact_List_Model is limited

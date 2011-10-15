@@ -143,6 +143,17 @@ package body UIM.Protocols.Contact_List_Models is
       return Qt4.Variants.Create;
    end Data;
 
+   ---------------------
+   --  Get_Root_Item  --
+   ---------------------
+
+   function Get_Root_Item (Self : not null access Contact_List_Model)
+      return
+        not null UIM.Protocols.Contact_List_Items.Contact_List_Item_Access is
+   begin
+      return Self.Root;
+   end Get_Root_Item;
+
    -------------------
    --  Header_Data  --
    -------------------
