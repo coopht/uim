@@ -42,6 +42,7 @@
 with Qt4.H_Box_Layouts.Constructors;
 with Qt4.List_Widgets.Constructors;
 with Qt4.Splitters.Constructors;
+with Qt4.Strings;
 with Qt4.Text_Edits.Constructors;
 with Qt4.V_Box_Layouts.Constructors;
 with Qt4.Widgets.Directors;
@@ -51,6 +52,21 @@ pragma Warnings (Off, UIM.UI.Chat_Widgets.MOC);
 --  Child package MOC must be included in the executable file.
 
 package body UIM.UI.Chat_Widgets is
+
+   use type Qt4.Strings.Q_String;
+
+   -------------------
+   --  Add_Message  --
+   -------------------
+   procedure Add_Message (Self : not null access Chat_Widget;
+                          Msg  : UIM.Protocols.Messages.Message_Access) is
+   begin
+      Self.History_Widget.Append
+        (Qt4.Strings.From_Ucs_4 ("<")
+           & Msg.Get_Sender.Name
+           & Qt4.Strings.From_Ucs_4 ("> ")
+           & Qt4.Strings.From_Ucs_4 (Msg.Get_Body.To_Wide_Wide_String));
+   end Add_Message;
 
    --------------
    --  Create  --
@@ -93,6 +109,11 @@ package body UIM.UI.Chat_Widgets is
       --  HLayout.Add_Widget (Splitter);
 
       Self.Set_Layout (HLayout);
+
+      Self.Members.Add_Item (User.Name);
+
+      --  Self.History_Widget.Set_Read_Only (True);
+
       return Self;
    end Create;
 
