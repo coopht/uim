@@ -206,51 +206,15 @@ package body UIM.Protocols.UXMPP is
             (Qt4.Strings.From_Ucs_4
                (To_Canonical_JID (Msg.Get_From.To_Wide_Wide_String)));
 
-      --  User_Info  : constant not null
-      --  UIM.Protocols.User_Infos.User_Info_Access
-      --    := new UIM.Protocols.User_Infos.User_Info;
-
-      --  Buddy_State : UIM.Protocols.Messages.UIM_State_Type;
-
    begin
       Self.Logger.Log ("Message received from :"
                          & Msg.Get_From.To_Wide_Wide_String);
 
+      Self.Logger.Log ("Message Text :"
+                         & Msg.Get_Body.To_Wide_Wide_String);
+
       Target_Msg.Set_Sender (User);
-      --  Target_Msg.Set_Plain_Text (Msg.Get_Body.To_Wide_Wide_String);
-
-      --  User_Info.Set_ID
-      --   (Qt4.Strings.From_Ucs_4
-      --     (To_Canonical_JID (Msg.Get_From.To_Wide_Wide_String)));
-      --  User.Set_Info (User_Info);
-      --  Target_Msg.Set_From (User);
-
-      --  case Msg.Get_Chat_State is
-
-      --     when XMPP.Messages.Active =>
-      --        Buddy_State := UIM.Protocols.Messages.Active;
-
-      --     when XMPP.Messages.Composing =>
-      --        Buddy_State := UIM.Protocols.Messages.Composing;
-
-      --     when XMPP.Messages.Paused =>
-      --        Buddy_State := UIM.Protocols.Messages.Paused;
-
-      --     when XMPP.Messages.Inactive =>
-      --        Buddy_State := UIM.Protocols.Messages.Inactive;
-
-      --     when XMPP.Messages.Gone =>
-      --        Buddy_State := UIM.Protocols.Messages.Gone;
-      --  end case;
-
-      --  Target_Msg.Set_State (Buddy_State);
-
-      --  Self.D.Log ("From: " & Msg.Get_From);
-      --  Self.D.Log ("Body: " & Msg.Get_Body);
-
-      --  if Msg.Get_Type = XMPP.Messages.Group_Chat then
-      --     Target_Msg.Type_Of_Msg := UIM.Protocols.Messages.Conference;
-      --  end if;
+      Target_Msg.Set_Body (Msg.Get_Body);
 
       Self.Handler.Message_Recieve_Signal (Target_Msg);
 
