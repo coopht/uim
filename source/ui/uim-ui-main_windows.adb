@@ -331,8 +331,6 @@ package body UIM.UI.Main_Windows is
    procedure  New_Msg_Slot (Self : not null access Main_Window;
                             Msg  : Qt4.Variants.Q_Variant) is
    begin
-      Ada.Text_IO.Put_Line ("New_Msg_Slot");
-
       --  If chat window is not loaded we should load it from ui file
       if Self.Chat_Window = null then
          Self.Chat_Window := UIM.UI.Chat_Windows.Create;
