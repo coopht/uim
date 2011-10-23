@@ -72,6 +72,8 @@ package body UIM.UI.Chat_Windows is
          Tab_Id := Self.Central_Widget.Add_Tab (Tab, Message.Get_Sender.Name);
 
       end if;
+
+      Tab.Add_Message (Message);
    end Add_Dialog;
 
    --------------
