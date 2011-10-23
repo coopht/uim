@@ -66,19 +66,31 @@ package body UIM.UI.Chat_Widgets is
       VLayout : constant not null access Qt4.V_BOX_Layouts.Q_V_BOX_Layout'Class
         := Qt4.V_BOX_Layouts.Constructors.Create;
 
+      --  Splitter : Qt4.Splitters.Q_Splitter_Access
+      --    := Qt4.Splitters.Constructors.Create;
+      --  XXX: QtAda segfault when pointed out orientation in constructor
+      --  := Qt4.Splitters.Constructors.Create (Qt4.Horizontal);
+
    begin
       Qt4.Widgets.Directors.Constructors.Initialize (Self);
 
       Self.History_Widget := Qt4.Text_Edits.Constructors.Create;
       Self.Message_Edit := Qt4.Text_Edits.Constructors.Create;
+      Self.Members := Qt4.List_Widgets.Constructors.Create;
+
+      --  XXX: not yet implemented
+      --  Splitter.Set_Orientation (Qt4.Horizontal);
+      --  Splitter.Add_Widget (Self.History_Widget);
+      --  Splitter.Add_Widget (Self.Message_Edit);
+
       VLayout.Add_Widget (Self.History_Widget);
       VLayout.Add_Widget (Self.Message_Edit);
 
-      Self.Members := Qt4.List_Widgets.Constructors.Create;
       --  Self.Members.Set_Visible (False);
       HLayout.Add_Layout (VLayout);
-      HLayout.Add_Widget (Qt4.Splitters.Constructors.Create);
       HLayout.Add_Widget (Self.Members);
+      --  Splitter.Add_Widget (Self.Members);
+      --  HLayout.Add_Widget (Splitter);
 
       Self.Set_Layout (HLayout);
       return Self;
