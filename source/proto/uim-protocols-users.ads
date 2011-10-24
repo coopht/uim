@@ -39,6 +39,7 @@
 ------------------------------------------------------------------------------
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
+with Qt_Ada.Generic_Variants;
 
 with UIM.Protocols.Contact_List_Items;
 with UIM.Protocols.Informations;
@@ -55,6 +56,9 @@ package UIM.Protocols.Users is
 
    function Information (Self : User)
      return UIM.Protocols.Informations.Information;
+
+   package User_Variant is
+      new Qt_Ada.Generic_Variants (User_Access, "User_Access");
 
 private
 

@@ -63,13 +63,14 @@ package body UIM.Protocols.Handlers is
       Msg  : Qt4.Variants.Q_Variant)
         is separate;
 
-   ---------------------------------------
-   --  Emit_Typing_Notification_Signal  --
-   ---------------------------------------
-   --  procedure Emit_Typing_Notification_Signal
-   --    (Self : not null access Protocol_Glue;
-   --     User : Qt4.Variants.Q_Variant)
-   --       is separate;
+   ----------------------------------
+   --  Emit_Message_Typing_Signal  --
+   ----------------------------------
+
+   procedure Emit_Message_Typing_Signal
+     (Self : not null access Protocol_Handler;
+      User : Qt4.Variants.Q_Variant)
+        is separate;
 
    -------------------------------------
    --  Emit_User_Info_Recived_Signal  --
@@ -112,17 +113,29 @@ package body UIM.Protocols.Handlers is
         (UIM.Protocols.Messages.Message_Variant.Create (Msg));
    end Message_Recieve_Signal;
 
-   --  ----------------------------------
-   --  --  Typing_Notification_Signal  --
-   --  ----------------------------------
-   --  procedure Typing_Notification_Signal
-   --    (Self : not null access Protocol_Handler;
-   --     USer : not null UIM.Protocols.Users.User_Access)
-   --  is
-   --  begin
-   --     Self.Emit_Typing_Notification_Signal
-   --       (UIM.Protocols.Users.User_Variant.Create (User));
-   --  end Typing_Notification_Signal;
+   ------------------------------
+   --  Message_Sent_Signal  --
+   ------------------------------
+   procedure Message_Sent_Signal
+     (Self : not null access Protocol_Handler;
+      Msg  : not null UIM.Protocols.Messages.Message_Access)
+   is
+   begin
+      Self.Emit_Message_Sent_Signal
+        (UIM.Protocols.Messages.Message_Variant.Create (Msg));
+   end Message_Sent_Signal;
+
+   -----------------------------
+   --  Message_Typing_Signal  --
+   -----------------------------
+   procedure Message_Typing_Signal
+     (Self : not null access Protocol_Handler;
+      User : not null UIM.Protocols.Users.User_Access)
+   is
+   begin
+      Self.Emit_Message_Typing_Signal
+        (UIM.Protocols.Users.User_Variant.Create (User));
+   end Message_Typing_Signal;
 
    --  --------------------------------
    --  --  User_Info_Recived_Signal  --

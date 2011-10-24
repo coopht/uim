@@ -44,6 +44,7 @@ private with Qt4.Objects.Directors;
 with Qt4.Variants;
 
 with UIM.Protocols.Messages;
+with UIM.Protocols.Users;
 
 package UIM.Protocols.Handlers is
 
@@ -57,6 +58,14 @@ package UIM.Protocols.Handlers is
      (Self : not null access Protocol_Handler;
       Msg  : not null UIM.Protocols.Messages.Message_Access);
 
+   procedure Message_Sent_Signal
+     (Self : not null access Protocol_Handler;
+      Msg  : not null UIM.Protocols.Messages.Message_Access);
+
+   procedure Message_Typing_Signal
+     (Self : not null access Protocol_Handler;
+      User : not null UIM.Protocols.Users.User_Access);
+
 private
 
    type Protocol_Handler is limited new Qt4.Objects.Directors.Q_Object_Director
@@ -64,10 +73,7 @@ private
 
    --  Qt Signals --
 
-   --  Signals notify gui about some events
-   --  for internal use only
-
-   --  Message group
+   --  Signals notify gui about some events for internal use only
 
    procedure Emit_Message_Recieve_Signal
      (Self : not null access Protocol_Handler;
@@ -75,10 +81,10 @@ private
    pragma Q_Signal (Emit_Message_Recieve_Signal);
    --  Signal emits when new message arrives from somebody
 
-   --  procedure Emit_Typing_Notification_Signal
-   --    (Self : not null access Protocol_Handler;
-   --     User : Qt4.Variants.Q_Variant);
-   --  pragma Q_Signal (Emit_Typing_Notification_Signal);
+   procedure Emit_Message_Typing_Signal
+     (Self : not null access Protocol_Handler;
+      User : Qt4.Variants.Q_Variant);
+   pragma Q_Signal (Emit_Message_Typing_Signal);
    --  Signal emits typing notification
 
    procedure Emit_Message_Sent_Signal
@@ -86,7 +92,6 @@ private
       Msg  : Qt4.Variants.Q_Variant);
    pragma Q_Signal (Emit_Message_Sent_Signal);
    --  Signal emits message sent to somebody
-   --  end of message group
 
    --  Roster management group
 
