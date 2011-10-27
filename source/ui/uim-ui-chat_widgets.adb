@@ -112,6 +112,8 @@ package body UIM.UI.Chat_Widgets is
 
       Self.Members.Add_Item (User.Name);
 
+      Self.User := User;
+
       --  Self.History_Widget.Set_Read_Only (True);
 
       return Self;
