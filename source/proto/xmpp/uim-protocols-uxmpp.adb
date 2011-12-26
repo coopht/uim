@@ -109,6 +109,9 @@ package body UIM.Protocols.UXMPP is
 
          Self.Set_Stream_Handler (Self);
          Self.Open;
+      elsif Status = League.Strings.To_Universal_String ("Offline") then
+         Self.Logger.Log ("Disconnecting");
+         Self.Close;
       end if;
    end Change_Status;
 
