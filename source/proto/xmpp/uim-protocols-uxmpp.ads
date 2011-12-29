@@ -44,6 +44,7 @@ with League.Strings;
 with UIM.Protocols.Common;
 with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Handlers;
+with UIM.Protocols.Messages;
 with UIM.Protocols.Statuses;
 
 with UIM.Utils.Logger;
@@ -78,6 +79,13 @@ package UIM.Protocols.UXMPP is
    type UIM_XMPP_Access is access all UIM_XMPP'Class;
 
    function Create return not null UIM_XMPP_Access;
+
+   --  Common protocols overriden routines
+
+   overriding
+   procedure Send_Message
+     (Self : not null access UIM_XMPP;
+      Msg  : not null UIM.Protocols.Messages.Message_Access);
 
    overriding procedure Set_Status
     (Self   : not null access UIM_XMPP;

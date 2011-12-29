@@ -43,6 +43,7 @@ with League.Strings;
 
 with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Handlers;
+with UIM.Protocols.Messages;
 with UIM.Protocols.Statuses;
 
 package UIM.Protocols.Common is
@@ -90,6 +91,12 @@ package UIM.Protocols.Common is
    not overriding
    function Get_Contact_List (Self : not null access Common_Protocol)
       return UIM.Protocols.Contact_Lists.Contact_List_Access is abstract;
+   --  This function returns contact list for specified protocol.
+
+   not overriding
+   procedure Send_Message
+     (Self : not null access Common_Protocol;
+      Msg  : not null UIM.Protocols.Messages.Message_Access) is abstract;
    --  This function returns contact list for specified protocol.
 
 end UIM.Protocols.Common;

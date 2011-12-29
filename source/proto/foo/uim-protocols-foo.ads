@@ -44,6 +44,7 @@ with League.Strings;
 with UIM.Protocols.Contact_Lists;
 with UIM.Protocols.Common;
 with UIM.Protocols.Handlers;
+with UIM.Protocols.Messages;
 with UIM.Protocols.Statuses;
 with UIM.Utils.Logger;
 
@@ -88,5 +89,9 @@ package UIM.Protocols.Foo is
 
    overriding function Get_Contact_List (Self : not null access UIM_Foo)
       return UIM.Protocols.Contact_Lists.Contact_List_Access;
+
+   overriding  procedure Send_Message
+     (Self : not null access UIM_Foo;
+      Msg  : not null UIM.Protocols.Messages.Message_Access);
 
 end UIM.Protocols.Foo;

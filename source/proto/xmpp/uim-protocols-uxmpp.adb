@@ -297,6 +297,17 @@ package body UIM.Protocols.UXMPP is
       Self.Send_Object (P);
    end Roster;
 
+   --------------------
+   --  Send_Message  --
+   --------------------
+   overriding
+   procedure Send_Message
+     (Self : not null access UIM_XMPP;
+      Msg  : not null UIM.Protocols.Messages.Message_Access) is
+   begin
+      null;
+   end Send_Message;
+
    ---------------------------
    --  Service_Information  --
    ---------------------------

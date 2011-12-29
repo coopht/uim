@@ -108,4 +108,15 @@ package body UIM.Protocols.Foo is
       Self.Id := Id;
    end Set_Id;
 
+   --------------------
+   --  Send_Message  --
+   --------------------
+   overriding
+   procedure Send_Message
+     (Self : not null access UIM_Foo;
+      Msg  : not null UIM.Protocols.Messages.Message_Access) is
+   begin
+      null;
+   end Send_Message;
+
 end UIM.Protocols.Foo;
