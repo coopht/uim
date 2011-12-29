@@ -40,6 +40,7 @@
 --  $Revision$ $Date$
 ------------------------------------------------------------------------------
 with Qt4.List_Widgets;
+with Qt4.Push_Buttons;
 with Qt4.Text_Edits;
 with Qt4.Widgets;
 private with Qt4.Widgets.Directors;
@@ -71,7 +72,7 @@ private
      History_Widget : Qt4.Text_Edits.Q_Text_Edit_Access;
      Message_Edit   : Qt4.Text_Edits.Q_Text_Edit_Access;
      Members        : Qt4.List_Widgets.Q_List_Widget_Access;
-
+     Send_Button    : Qt4.Push_Buttons.Q_Push_Button_Access;
      --  Owner of current dialog
      User           : UIM.Protocols.Users.User_Access := null;
    end record;

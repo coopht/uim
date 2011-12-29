@@ -41,6 +41,7 @@
 ------------------------------------------------------------------------------
 with Qt4.H_Box_Layouts.Constructors;
 with Qt4.List_Widgets.Constructors;
+with Qt4.Push_Buttons.Constructors;
 with Qt4.Splitters.Constructors;
 with Qt4.Strings;
 with Qt4.Text_Edits.Constructors;
@@ -79,7 +80,7 @@ package body UIM.UI.Chat_Widgets is
       HLayout : constant not null access Qt4.H_Box_Layouts.Q_H_BOX_Layout'Class
         := Qt4.H_Box_Layouts.Constructors.Create;
 
-      VLayout : constant not null access Qt4.V_BOX_Layouts.Q_V_BOX_Layout'Class
+      VLayout : not null access Qt4.V_BOX_Layouts.Q_V_BOX_Layout'Class
         := Qt4.V_BOX_Layouts.Constructors.Create;
 
       --  Splitter : Qt4.Splitters.Q_Splitter_Access
@@ -93,6 +94,8 @@ package body UIM.UI.Chat_Widgets is
       Self.History_Widget := Qt4.Text_Edits.Constructors.Create;
       Self.Message_Edit := Qt4.Text_Edits.Constructors.Create;
       Self.Members := Qt4.List_Widgets.Constructors.Create;
+      Self.Send_Button := Qt4.Push_Buttons.Constructors.Create
+                            (Qt4.Strings.From_Ucs_4 ("Send"));
 
       --  XXX: not yet implemented
       --  Splitter.Set_Orientation (Qt4.Horizontal);
@@ -104,7 +107,13 @@ package body UIM.UI.Chat_Widgets is
 
       --  Self.Members.Set_Visible (False);
       HLayout.Add_Layout (VLayout);
-      HLayout.Add_Widget (Self.Members);
+
+      --  Creating send button
+      VLayout := Qt4.V_BOX_Layouts.Constructors.Create;
+      VLayout.Add_Widget (Self.Members);
+      VLayout.Add_Widget (Self.Send_Button);
+
+      HLayout.Add_Layout (VLayout);
       --  Splitter.Add_Widget (Self.Members);
       --  HLayout.Add_Widget (Splitter);
 
@@ -114,7 +123,7 @@ package body UIM.UI.Chat_Widgets is
 
       Self.User := User;
 
-      --  Self.History_Widget.Set_Read_Only (True);
+      Self.History_Widget.Set_Read_Only (True);
 
       return Self;
    end Create;
