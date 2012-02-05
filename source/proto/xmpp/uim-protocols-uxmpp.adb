@@ -97,6 +97,9 @@ package body UIM.Protocols.UXMPP is
          Self.Set_JID
            (League.Strings.To_Universal_String ("uim-test@zion"));
 
+         Self.Set_Host
+           (League.Strings.To_Universal_String ("zion"));
+
          --  Self.Set_Password (League.Strings.To_Universal_String
          --      (Params.Get_Password.To_Ucs_4));
 
