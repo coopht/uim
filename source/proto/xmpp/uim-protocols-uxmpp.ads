@@ -50,7 +50,6 @@ with UIM.Protocols.Statuses;
 with UIM.Utils.Logger;
 
 with XMPP.Binds;
-with XMPP.IQ_Sessions;
 with XMPP.Presences;
 with XMPP.Rosters;
 with XMPP.Sessions;
@@ -127,7 +126,7 @@ package UIM.Protocols.UXMPP is
 
    overriding procedure Session_State
      (Self   : in out UIM_XMPP;
-      Status : XMPP.IQ_Sessions.Session_State);
+      Status : XMPP.Session_State);
 
    overriding procedure Service_Information
     (Self : in out UIM_XMPP;

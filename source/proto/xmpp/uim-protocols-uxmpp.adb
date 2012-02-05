@@ -49,7 +49,7 @@ with XMPP.Logger;
 package body UIM.Protocols.UXMPP is
 
    use type League.Strings.Universal_String;
-   use type XMPP.Messages.Message_Type;
+   use type XMPP.Message_Type;
    use type UIM.Protocols.Users.User_Access;
 
    function "+" (Item : Wide_Wide_String)
@@ -237,7 +237,7 @@ package body UIM.Protocols.UXMPP is
         ("User "
            & Data.Get_From.To_Wide_Wide_String
            & " is "
-           & XMPP.Presences.Show_Kind'Wide_Wide_Image (Data.Get_Show)
+           & XMPP.Show_Kind'Wide_Wide_Image (Data.Get_Show)
            & "(" & Data.Get_Status.To_Wide_Wide_String & ")");
 
       --  Requesting sirvice discovery information : for debugging
@@ -331,11 +331,11 @@ package body UIM.Protocols.UXMPP is
    ---------------------
    overriding procedure Session_State
      (Self   : in out UIM_XMPP;
-      Status : XMPP.IQ_Sessions.Session_State) is
-      use type XMPP.IQ_Sessions.Session_State;
+      Status : XMPP.Session_State) is
+      use type XMPP.Session_State;
 
    begin
-      if Status = XMPP.IQ_Sessions.Established then
+      if Status = XMPP.Established then
          Self.Logger.Log ("Session established !!!");
 
          --  After session successfully established
